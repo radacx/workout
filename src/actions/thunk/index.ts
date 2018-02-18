@@ -1,8 +1,17 @@
 import { realm } from '../../models/realm/realm';
-import { IThunkAction } from '../../models/interfaces/IThunkAction';
-import { IExerciseSchemaProps } from '../../models/classes/Exercise';
 import { addExerciseAsyncFactory } from './addExerciseAsyncFactory';
+import { updateExerciseAsyncFactory } from './updateExerciseAsyncFactory';
+import {
+  addExercise,
+  updateExercise,
+} from '../actionCreators';
 
-export const addExerciseAsync: IThunkAction<IExerciseSchemaProps> = addExerciseAsyncFactory({
+export const addExerciseAsync = addExerciseAsyncFactory({
   realm,
+  addExercise,
+});
+
+export const updateExerciseAsync = updateExerciseAsyncFactory({
+  realm,
+  updateExercise,
 });

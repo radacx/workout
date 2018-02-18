@@ -1,5 +1,4 @@
 import * as React from 'react';
-import * as PropTypes from 'prop-types';
 import {
   Button,
   View,
@@ -8,14 +7,11 @@ import { Exercises } from '../containers/Exercises';
 
 export interface IListCallbackProps {
   readonly addExercise: () => void;
+  readonly updateExercise: () => void;
 }
 
 export class List extends React.PureComponent<IListCallbackProps> {
   static displayName = 'List';
-
-  static propTypes = {
-    addExercise: PropTypes.func.isRequired,
-  };
 
   render() {
     return (
@@ -23,6 +19,10 @@ export class List extends React.PureComponent<IListCallbackProps> {
         <Button
           onPress={this.props.addExercise}
           title={'Add random exercise'}
+        />
+        <Button
+          onPress={this.props.updateExercise}
+          title={'Update'}
         />
         <Exercises />
       </View>

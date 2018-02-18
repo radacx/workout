@@ -1,24 +1,24 @@
 import { Dispatch } from 'redux';
-import { addExercise} from '../actionCreators';
+import { updateExercise } from '../actionCreators';
 import {
   Exercise,
   IExerciseSchemaProps,
 } from '../../models/classes/Exercise';
 import { IAppState } from '../../models/state/IAppState';
 
-export interface IAddExerciseAsyncFactoryDeps {
+export interface IUpdateExerciseAsyncFactoryDeps {
   readonly realm: Realm;
-  readonly addExercise: typeof addExercise;
+  readonly updateExercise: typeof updateExercise;
 }
 
-export const addExerciseAsyncFactory =
-  (deps: IAddExerciseAsyncFactoryDeps) =>
+export const updateExerciseAsyncFactory =
+  (deps: IUpdateExerciseAsyncFactoryDeps) =>
     (partialExercise: IExerciseSchemaProps) =>
       (dispatch: Dispatch<IAppState>) => {
         /*deps.realm.write(() =>
-          deps.realm.create(Exercise, partialExercise));*/
+         deps.realm.create(Exercise, partialExercise));*/
 
         const exercise = Exercise.fromPartial(partialExercise);
 
-        return dispatch(deps.addExercise(exercise));
+        return dispatch(deps.updateExercise(exercise));
       };

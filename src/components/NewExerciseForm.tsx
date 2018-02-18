@@ -1,11 +1,9 @@
 import {
   View,
-  Picker,
 } from 'react-native';
 import React from 'react';
 import { MovementPlane } from '../models/enums/MovementPlane';
 import { MovementPlanePicker } from './MovementPlanePicker';
-import { allMovementPlanes } from '../constants/allMovementPlanes';
 
 export interface INewExerciseFormProps {
   movementPlanes: MovementPlane[];
@@ -24,15 +22,10 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormProps, 
     };
   }
 
-  _valueChanged = (value: MovementPlane) =>
-    this.setState({
-      value,
-    });
-
   render() {
     return (
       <View>
-        <MovementPlanePicker movementPlanes={allMovementPlanes} />
+        <MovementPlanePicker movementPlanes={[]} />
       </View>
     );
   }

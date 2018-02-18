@@ -1,7 +1,8 @@
-import { ExercisesState } from './ExercisesState';
 import { ITrainingSession } from '../interfaces/ITrainingSession';
+import { IHomogenousObject } from '../interfaces/IHomogenousObject';
+import { IExercise } from '../interfaces/IExercise';
 
 export interface IAppState {
-  readonly exercises: ExercisesState;
-  readonly sessions: ITrainingSession[];
+  readonly exercises: IHomogenousObject<IExercise>;
+  readonly sessions: IHomogenousObject<ITrainingSession>;
 }

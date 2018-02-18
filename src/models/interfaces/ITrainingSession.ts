@@ -6,10 +6,6 @@ export enum ExerciseType {
   Duration = 'Duration',
 }
 
-export interface IBodyweightExercise extends IExercise {
-  readonly relativeBodyweight: number;
-}
-
 export interface ITempo {
   readonly eccentric: number;
   readonly eccentricPause: number;
@@ -34,7 +30,7 @@ export interface ITrainingSet {
 
 export interface ISessionExercise {
   readonly id: Guid;
-  readonly exercise: IExercise;
+  readonly exercise: IExercise['id'];
   readonly sets: ITrainingSet[];
 }
 
@@ -44,4 +40,8 @@ export interface ITrainingSession {
   readonly end: Date;
   readonly bodyweight: number;
   readonly exercises: ISessionExercise[];
+}
+
+export interface IBodyweightExercise extends IExercise {
+  readonly relativeBodyweight: number;
 }
