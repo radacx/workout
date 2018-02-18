@@ -1,0 +1,1 @@
+{"version":3,"file":"immutableTransform.js","sourceRoot":"E:/JavaScript/workout/","sources":["utils/immutableTransform.ts"],"names":[],"mappings":"AACA,OAAO,EAAE,GAAG,EAAE,MAAK,WAAW,CAAC;AAI/B,OAAO,EAAE,kBAAkB,EAAE,MAAM,sBAAsB,CAAC;AAE1D,MAAM,CAAC,MAAM,kBAAkB,GAAG,kBAAkB,CAClD;IACE,YAAY,EAAE,CAAC,QAAwB,EAAkB,EAAE,CACzD,GAAG,CAAiB,QAAQ,CAAC;IAC/B,IAAI,EAAE,WAAW;CAClB,CACF,CAAC"}

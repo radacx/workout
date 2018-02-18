@@ -1,0 +1,1 @@
+{"version":3,"file":"realm.js","sourceRoot":"E:/JavaScript/workout/","sources":["models/realm/realm.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,QAAQ,EAAE,MAAM,qBAAqB,CAAC;AAC/C,MAAM,KAAK,GAAG,OAAO,CAAC,OAAO,CAAC,CAAC;AAE/B,MAAM,CAAC,MAAM,KAAK,GAAG,IAAI,KAAK,CAAC;IAC7B,MAAM,EAAE;QACN,QAAQ;KACT;CACF,CAAC,CAAC"}

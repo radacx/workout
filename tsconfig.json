@@ -1,0 +1,49 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "es6",
+    "moduleResolution": "node",
+    "jsx": "react",
+    "rootDir": "src/",
+    "outDir": "./dist/",
+    "noImplicitAny": false,
+    "preserveConstEnums": true,
+    "sourceMap": true,
+    "noImplicitReturns": true,
+    "noUnusedParameters": true,
+    "noUnusedLocals": true,
+    "forceConsistentCasingInFileNames": true,
+    "allowUnreachableCode": false,
+    "allowUnusedLabels": false,
+    "noFallthroughCasesInSwitch": true,
+    "strictNullChecks": true,
+    "removeComments": true,
+    "importHelpers": true,
+    "downlevelIteration": true,
+    "isolatedModules": true,
+    "alwaysStrict": true,
+    "noImplicitThis": true,
+    "baseUrl": "./",
+    "allowSyntheticDefaultImports": true,
+    "sourceRoot": "./",
+    "mapRoot": "./"
+  },
+  "types": [
+    "react",
+    "react-native",
+    "jest",
+    "redux-persist"
+  ],
+  "include": [
+    "src/*"
+  ],
+  "exclude": [
+    "android",
+    "ios",
+    "build",
+    "node_modules",
+    "windows",
+    ".idea",
+    "dist"
+  ]
+}
