@@ -1,18 +1,25 @@
 import * as React from 'react';
 import { Text } from 'react-native';
 import { IExercise } from '../models/interfaces/IExercise';
+import { styles } from '../constants/styles';
 
-interface IExerciseProps {
+export interface IExerciseDataProps {
   readonly exercise: IExercise;
 }
 
-const Exercise: React.SFC<IExerciseProps> = ({ exercise }) => {
-  return (
-    <Text>
-      {exercise.name}
-    </Text>
-  );
-};
+export interface IExerciseCallbackProps {
+  readonly removeExercise: () => void;
+}
+
+interface IExerciseProps extends IExerciseDataProps, IExerciseCallbackProps {}
+
+const Exercise: React.SFC<IExerciseProps> = ({ exercise, removeExercise }) =>
+  <Text
+    style={styles.exercise}
+    onPress={removeExercise}
+  >
+    {exercise.name}
+  </Text>;
 
 Exercise.displayName = 'Exercise';
 

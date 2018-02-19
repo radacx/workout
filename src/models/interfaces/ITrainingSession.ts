@@ -1,5 +1,6 @@
 import { Guid } from '../Guid';
 import { IExercise } from './IExercise';
+import { IHomogenousObject } from './IHomogenousObject';
 
 export enum ExerciseType {
   Reps = 'Reps',
@@ -28,10 +29,12 @@ export interface ITrainingSet {
   readonly weight?: number;
 }
 
+type TrainingSet = ITrainingSetForDuration | ITrainingSetForReps;
+
 export interface ISessionExercise {
   readonly id: Guid;
   readonly exercise: IExercise['id'];
-  readonly sets: ITrainingSet[];
+  readonly sets: IHomogenousObject<TrainingSet>;
 }
 
 export interface ITrainingSession {
@@ -39,7 +42,7 @@ export interface ITrainingSession {
   readonly begin: Date;
   readonly end: Date;
   readonly bodyweight: number;
-  readonly exercises: ISessionExercise[];
+  readonly exercises: IHomogenousObject<ISessionExercise>;
 }
 
 export interface IBodyweightExercise extends IExercise {

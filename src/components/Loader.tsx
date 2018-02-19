@@ -8,19 +8,16 @@ interface ILoaderState {
 export class Loader extends React.PureComponent<{}, ILoaderState> {
   intervalId: number;
 
-  constructor(props: any) {
-    super(props);
-
-    this.state = {
-      counter: 0,
-    };
-  }
+  state: ILoaderState = {
+    counter: 0,
+  };
 
   componentDidMount() {
     this.intervalId = setInterval(
-      () => this.setState(prevState => ({
-        counter: prevState.counter + 1,
-      })),
+      () =>
+        this.setState(prevState => ({
+          counter: prevState.counter + 1,
+        })),
       1500,
     );
   }

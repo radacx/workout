@@ -10,22 +10,19 @@ export interface IListCallbackProps {
   readonly updateExercise: () => void;
 }
 
-export class List extends React.PureComponent<IListCallbackProps> {
-  static displayName = 'List';
+const List: React.SFC<IListCallbackProps> = ({ addExercise, updateExercise }) =>
+  <View>
+    <Button
+      onPress={addExercise}
+      title={'Add random exercise'}
+    />
+    <Button
+      onPress={updateExercise}
+      title={'Update'}
+    />
+    <Exercises />
+  </View>;
 
-  render() {
-    return (
-      <View>
-        <Button
-          onPress={this.props.addExercise}
-          title={'Add random exercise'}
-        />
-        <Button
-          onPress={this.props.updateExercise}
-          title={'Update'}
-        />
-        <Exercises />
-      </View>
-    );
-  }
-}
+List.displayName = 'List';
+
+export { List };

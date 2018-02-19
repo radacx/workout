@@ -6,6 +6,8 @@ export const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     backgroundColor: '#ffca3b',
+    borderWidth: 1,
+    borderTopColor: '#4ab',
   },
   welcome: {
     fontSize: 20,
@@ -16,5 +18,7 @@ export const styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  exercise: {
   },
 });

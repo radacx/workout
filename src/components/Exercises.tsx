@@ -1,17 +1,20 @@
 import * as React from 'react';
-import { IExercise } from '../models/interfaces/IExercise';
-import { FlatList } from 'react-native';
-import { Exercise } from './Exercise';
+import {
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native';
+import { Exercise } from '../containers/Exercise';
+import { Guid } from '../models/Guid';
 
 export interface IExercisesDataProps {
-  readonly exercises: IExercise[];
+  readonly exerciseIds: Guid[];
 }
 
-const Exercises: React.SFC<IExercisesDataProps> = ({ exercises }) =>
+const Exercises: React.SFC<IExercisesDataProps> = ({ exerciseIds }) =>
   <FlatList
-    data={exercises}
-    renderItem={({ item }) => <Exercise key={item.id} exercise={item}/>}
-    keyExtractor={({ id }) => id}
+    data={exerciseIds}
+    renderItem={({ item: id }: ListRenderItemInfo<Guid>) => <Exercise key={id} id={id}/>}
+    keyExtractor={id => id}
   />;
 
 export { Exercises };

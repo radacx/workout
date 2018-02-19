@@ -4,14 +4,10 @@ import { IExercisesDataProps } from '../components/Exercises';
 import { Exercises as ExercisesComponent } from '../components/Exercises';
 import * as React from 'react';
 
-const mapStateToProps = (state: IAppState): IExercisesDataProps => {
-  return {
-    exercises: Object
-      .keys(state.exercises)
-      .map(key => state.exercises[key]),
-  };
-};
-
+const mapStateToProps = (state: IAppState): IExercisesDataProps => ({
+  exerciseIds: Object
+    .keys(state.exercises),
+});
 
 export const Exercises: React.ComponentClass = connect(
   mapStateToProps,

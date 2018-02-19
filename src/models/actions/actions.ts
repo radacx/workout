@@ -1,8 +1,10 @@
 import {
   EXERCISE_ADDED,
+  EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
 import { IExercise } from '../interfaces/IExercise';
+import { Guid } from '../Guid';
 
 export class AddExerciseAction {
   readonly type = EXERCISE_ADDED;
@@ -18,9 +20,17 @@ export class UpdateExerciseAction {
   }) {}
 }
 
+export class RemoveExerciseAction {
+  readonly type = EXERCISE_REMOVED;
+  constructor (public payload: {
+    id: Guid,
+  }) {}
+}
+
 type actions = [
   AddExerciseAction,
-  UpdateExerciseAction
+  UpdateExerciseAction,
+  RemoveExerciseAction
 ];
 
 export type AppAction = actions[number];

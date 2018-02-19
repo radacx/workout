@@ -7,10 +7,12 @@ import {
 import {
   AddExerciseAction,
   AppAction,
+  RemoveExerciseAction,
   UpdateExerciseAction,
 } from '../../models/actions/actions';
 import {
   EXERCISE_ADDED,
+  EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
 
@@ -25,15 +27,21 @@ const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction)
     }
   );
 
-const updateExercise = (state: State, _: UpdateExerciseAction): State =>
+const updateExercise = (state: State, { payload }: UpdateExerciseAction): State =>
   assignWithGet(
     state,
-    st => st[Object.keys(st)[5]],
+    (st, id) => st[id],
+    () => payload.exercise,
+    payload.exercise.id,
+  );
+
+const removeExercise = (state: State, { payload }: RemoveExerciseAction): State =>
+  assign(
+    state,
     st => {
-      console.log(st);
-      st.name = 'HAHA';
+      delete st[payload.id];
       return st;
-    }
+    },
   );
 
 const initialState: State = {};
@@ -43,9 +51,10 @@ export const exercises = (state: State = initialState, action: AppAction): State
   switch (action.type) {
     case EXERCISE_ADDED:
       return addExercise(state, action);
-
     case EXERCISE_UPDATED:
       return updateExercise(state, action);
+    case EXERCISE_REMOVED:
+      return removeExercise(state, action);
 
     default:
       return state;
