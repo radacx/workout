@@ -1,32 +1,22 @@
 import {
   View,
+  Button,
 } from 'react-native';
 import React from 'react';
-import { MovementPlane } from '../models/enums/MovementPlane';
-import { MovementPlanePicker } from './MovementPlanePicker';
 
-export interface INewExerciseFormProps {
-  movementPlanes: MovementPlane[];
+export interface INewExerciseFormCallbackProps {
+  addExercise: () => void;
 }
 
-interface INewExerciseFormState {
-  movementPlanes: MovementPlane[];
-}
 
-export class NewExerciseForm extends React.PureComponent<INewExerciseFormProps, INewExerciseFormState> {
-  constructor(props: INewExerciseFormProps) {
-    super(props);
+const NewExerciseForm: React.SFC<INewExerciseFormCallbackProps> = ({ addExercise }) =>
+  <View>
+    <Button
+      onPress={addExercise}
+      title={'Add random'}
+    />
+  </View>;
 
-    this.state = {
-      movementPlanes: [],
-    };
-  }
+NewExerciseForm.displayName = 'NewExerciseForm';
 
-  render() {
-    return (
-      <View>
-        <MovementPlanePicker movementPlanes={[]} />
-      </View>
-    );
-  }
-}
+export { NewExerciseForm };

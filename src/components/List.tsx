@@ -4,21 +4,17 @@ import {
   View,
 } from 'react-native';
 import { Exercises } from '../containers/Exercises';
+import { styles } from '../constants/styles';
 
 export interface IListCallbackProps {
-  readonly addExercise: () => void;
-  readonly updateExercise: () => void;
+  goToNewExerciseForm: () => void;
 }
 
-const List: React.SFC<IListCallbackProps> = ({ addExercise, updateExercise }) =>
-  <View>
+const List: React.SFC<IListCallbackProps> = ({ goToNewExerciseForm }) =>
+  <View style={styles.container} >
     <Button
-      onPress={addExercise}
-      title={'Add random exercise'}
-    />
-    <Button
-      onPress={updateExercise}
-      title={'Update'}
+      onPress={goToNewExerciseForm}
+      title={'Add new exercise'}
     />
     <Exercises />
   </View>;

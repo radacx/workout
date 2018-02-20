@@ -18,7 +18,7 @@ export class Loader extends React.PureComponent<{}, ILoaderState> {
         this.setState(prevState => ({
           counter: prevState.counter + 1,
         })),
-      1500,
+      750,
     );
   }
 

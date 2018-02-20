@@ -5,6 +5,7 @@ import {
   IExerciseSchemaProps,
 } from '../../models/classes/Exercise';
 import { IAppState } from '../../models/state/IAppState';
+import { NavigationActions } from 'react-navigation';
 
 export interface IAddExerciseAsyncFactoryDeps {
   readonly realm: Realm;
@@ -19,6 +20,7 @@ export const addExerciseAsyncFactory =
           deps.realm.create(Exercise, partialExercise));*/
 
         const exercise = Exercise.fromPartial(partialExercise);
+        deps.addExercise(exercise);
 
-        return dispatch(deps.addExercise(exercise));
+        return dispatch(dispatch(NavigationActions.back()));
       };

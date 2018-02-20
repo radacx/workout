@@ -1,9 +1,9 @@
 import * as React from 'react';
-import { MainApp } from './components/MainApp';
 import { Provider } from 'react-redux';
 import { PersistGate } from 'redux-persist/integration/react';
 import { configureStore } from './utils/configureStore';
 import { Loader } from './components/Loader';
+import { AppNavigation } from './components/RootStack';
 
 const {
   store,
@@ -18,7 +18,7 @@ export default class App extends React.PureComponent {
           persistor={persistor}
           loading={<Loader />}
         >
-          <MainApp/>
+          <AppNavigation />
         </PersistGate>
       </Provider>
     );
