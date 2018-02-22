@@ -8,7 +8,7 @@ import { IAppState } from '../../models/state/IAppState';
 import { NavigationActions } from 'react-navigation';
 
 export interface IAddExerciseAsyncFactoryDeps {
-  readonly realm: Realm;
+  readonly realm: any;
   readonly addExercise: typeof addExercise;
 }
 

@@ -7,7 +7,7 @@ import {
 import { IAppState } from '../../models/state/IAppState';
 
 export interface IUpdateExerciseAsyncFactoryDeps {
-  readonly realm: Realm;
+  readonly realm: any;
   readonly updateExercise: typeof updateExercise;
 }
 

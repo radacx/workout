@@ -9,10 +9,16 @@ import {
   List as ListComponent,
 } from '../components/List';
 import { NavigationActions } from 'react-navigation';
+import { MuscleGroup } from '../models/enums/MuscleGroup';
 
 
 const mapDispatchToProps = (dispatch: Dispatch<IAppState>): IListCallbackProps => ({
-  goToNewExerciseForm: () => dispatch(NavigationActions.navigate({ routeName: 'AddNew' })),
+  goToNewExerciseForm: () => dispatch(NavigationActions.navigate({ routeName: 'MultiSelect',
+      params: {
+        options: Object.keys(MuscleGroup)
+          .map((k: any) => MuscleGroup[ k ]),
+      },
+    })),
 });
 
 export const List: React.ComponentClass = connect(

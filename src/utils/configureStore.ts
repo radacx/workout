@@ -5,20 +5,22 @@ import {
   Action,
   MiddlewareAPI,
   Middleware,
+  Store,
 } from 'redux';
 import {
   persistReducer,
-  persistStore,
+  //  persistStore,
 } from 'redux-persist';
 import storage from 'redux-persist/lib/storage';
 import { composeWithDevTools } from 'redux-devtools-extension';
 import { PersistConfig } from 'redux-persist/es/types';
-import { autoMergeLevel2 } from 'redux-persist/es/stateReconciler/autoMergeLevel2';
-import { ThunkAction } from 'redux-thunk';
+import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
+import {
+  default as thunk,
+  ThunkAction,
+} from 'redux-thunk';
 import { Dispatch } from 'react-redux';
-import invariant from 'invariant';
-import { IAppState } from '../models/state/IAppState';
-import { NavigationState } from 'react-navigation';
+import { persistStore } from 'redux-persist';
 
 const persistConfig: PersistConfig = {
   key: 'root',
@@ -42,7 +44,7 @@ const actionToPlainObject: Middleware =
         });
       };
 
-const reduxSubscribers = new Map();
+/*const reduxSubscribers = new Map();
 
 export const createReactNavigationReduxMiddleware = <State extends IAppState>(
   key: string,
@@ -99,15 +101,34 @@ const middleware = createReactNavigationReduxMiddleware(
 
 export const addListener = createReduxBoundAddListener('root');
 
-export const configureStore = () => {
+*/
+
+export const configureStoreForWixNavigation = (callback: (store: Store<any>) => void) => {
   const store = createStore(
     persistedReducer,
-    undefined,
     composeEnhancers(
       applyMiddleware(
         actionToPlainObject,
-        middleware,
-        //  thunk,
+      ),
+    ),
+  );
+
+
+  const persistor = persistStore(store, undefined, () => callback(store));
+
+  return {
+    store,
+    persistor,
+  };
+};
+
+export const configureStore = () => {
+  const store = createStore(
+    persistedReducer,
+    composeEnhancers(
+      applyMiddleware(
+        actionToPlainObject,
+        thunk,
       ),
     ),
   );

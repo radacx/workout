@@ -11,6 +11,7 @@ import {
   connect,
 } from 'react-redux';
 import { IAppState } from '../models/state/IAppState';
+import { MultiSelect } from './MultiSelect';
 import { addListener } from '../utils/configureStore';
 
 export const Stack = StackNavigator(
@@ -21,6 +22,9 @@ export const Stack = StackNavigator(
     AddNew: {
       screen: NewExerciseForm,
     },
+    MultiSelect: {
+      screen: MultiSelect,
+    }
   },
   {
     initialRouteName: 'AddNew',
