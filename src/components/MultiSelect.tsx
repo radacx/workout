@@ -3,9 +3,9 @@ import {
   View,
   FlatList,
   ListRenderItemInfo,
-  Text,
 } from 'react-native';
 import { CheckBox } from 'react-native-elements';
+import { assignWithGet } from '../utils/assign';
 
 export interface IMultiSelectProps {
   readonly options: string[];
@@ -27,15 +27,9 @@ export class MultiSelect extends React.PureComponent<IMultiSelectProps, IMultiSe
     };
   }
 
-  _changeChecked = (newValue: boolean, index: number): void =>
-    /*this.setState(({ options }) => ({
-      options: assignWithGet(options, opts => opts[index], _ => newValue),
-    }));*/
+  _changeChecked = (index: number): void =>
     this.setState(({ options }) => ({
-      options: {
-        ...options,
-        [ index ]: newValue,
-      }
+      options: assignWithGet(options, opts => opts[ index ], checked => !checked),
     }));
 
   render() {
@@ -43,11 +37,12 @@ export class MultiSelect extends React.PureComponent<IMultiSelectProps, IMultiSe
       <View>
         <FlatList
           data={this.state.options}
+          keyExtractor={(_, index) => index.toString()}
           renderItem={({ item: checked, index }: ListRenderItemInfo<boolean>) =>
             <CheckBox
               checked={checked}
-              key={index}
               title={this.props.options[index]}
+              onPress={() => this._changeChecked(index)}
             />
           }
         />

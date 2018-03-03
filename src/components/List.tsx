@@ -3,32 +3,49 @@ import {
   Button,
   View,
 } from 'react-native';
-import { Exercises } from '../containers/Exercises';
 import { styles } from '../constants/styles';
 import { Navigator } from 'react-native-navigation';
-import { MuscleGroup } from '../models/enums/MuscleGroup';
+import { ComponentList } from '../containers/ComponentList';
+import { Exercise } from '../containers/Exercise';
 
 export interface IListCallbackProps {
   goToNewExerciseForm: () => void;
-  navigator: Navigator;
 }
 
-const List: React.SFC<IListCallbackProps> = ({ navigator }) =>
-  <View style={styles.container} >
+interface IListProps extends IListCallbackProps {
+  readonly navigator: Navigator;
+}
+
+const List: React.SFC<IListProps> = ({ navigator }) =>
+  <View style={styles.container}>
     <Button
       onPress={() => {
         navigator.push({
           screen: 'MultiSelect',
           title: 'MultiSelect',
           passProps: {
-            options: Object.keys(MuscleGroup)
-              .map((k: any) => MuscleGroup[ k ]),
-          }
+            /*options: Object.keys(MuscleGroup)
+             .map((k: any) => MuscleGroup[ k ]),*/
+            options: [
+              1,
+              2,
+              3,
+              4,
+              5,
+              6,
+              7,
+              8,
+              9,
+            ].map(num => `Option ${num}`),
+          },
         });
       }}
       title={'Add new exercise'}
     />
-    <Exercises />
+    <ComponentList
+      getIdsFromState={state => state.exercises}
+      component={Exercise}
+    />
   </View>;
 
 List.displayName = 'List';
