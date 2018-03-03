@@ -16,7 +16,7 @@ export interface ITempo {
 
 export interface ITrainingSetForReps extends ITrainingSet {
   readonly reps: number;
-  readonly tempo: ITempo;
+  readonly tempo?: ITempo;
 }
 
 export interface ITrainingSetForDuration extends ITrainingSet {
@@ -39,8 +39,7 @@ export interface ISessionExercise {
 
 export interface ITrainingSession {
   readonly id: Guid;
-  readonly begin: Date;
-  readonly end: Date;
+  readonly date: Date;
   readonly bodyweight: number;
   readonly exercises: IHomogenousObject<ISessionExercise>;
 }

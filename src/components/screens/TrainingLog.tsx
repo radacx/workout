@@ -5,15 +5,11 @@ import {
   Button,
   View,
 } from 'react-native';
-import { Navigator } from 'react-native-navigation';
 import { AddNewTrainingSession } from './AddNewTrainingSession';
 import { INavigationProps } from '../../models/interfaces/INavigationProps';
+import { IScreen } from '../../models/interfaces/IScreen';
 
-interface ITrainingLogOwnProps {
-  readonly navigator: Navigator;
-}
-
-type TrainingLogProps = ITrainingLogOwnProps;
+type TrainingLogProps = IScreen;
 
 export class TrainingLog extends React.PureComponent<TrainingLogProps> {
   static NavigationProps: INavigationProps = {

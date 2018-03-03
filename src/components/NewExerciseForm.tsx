@@ -8,7 +8,6 @@ export interface INewExerciseFormCallbackProps {
   addExercise: () => void;
 }
 
-
 const NewExerciseForm: React.SFC<INewExerciseFormCallbackProps> = ({ addExercise }) =>
   <View>
     <Button

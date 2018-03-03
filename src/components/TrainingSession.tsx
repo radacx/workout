@@ -5,34 +5,24 @@ import {
   Text,
   View,
 } from 'react-native';
-import { dateUtils } from '../utils/dateUtils';
 
 export interface ITrainingSessionDataProps {
   readonly session: ITrainingSession;
 }
 
-export interface ITrainingSessionCallbackProps {
-  readonly openTrainingSessionForm: () => void;
-}
+type TrainingSessionProps = ITrainingSessionDataProps;
 
-export interface ITrainingSessionProps extends ITrainingSessionDataProps,
-  ITrainingSessionCallbackProps {
-}
-
-const TrainingSession: React.SFC<ITrainingSessionProps> = ({ session, openTrainingSessionForm }) =>
+const TrainingSession: React.SFC<TrainingSessionProps> = ({ session }) =>
   <View>
     <Text>
-      {session.begin}
-    </Text>
-    <Text>
-      {dateUtils.getDifference(session.begin, session.end)}
+      {(session.date || new Date()).toString()}
     </Text>
     <Text>
       {session.bodyweight}
     </Text>
     <Button
       title="View details"
-      onPress={openTrainingSessionForm}
+      onPress={() => undefined}
     />
   </View>;
 
