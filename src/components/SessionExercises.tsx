@@ -1,19 +1,20 @@
 import React from 'react';
-import { FlatList } from 'react-native';
-import { SessionExercise } from './SessionExercise';
+import {
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native';
+import { SessionExercise } from '../containers/SessionExercise';
 import { ISessionExercise } from '../models/interfaces/ITrainingSession';
+import { IHomogenousObject } from '../models/interfaces/IHomogenousObject';
+import { homogenousObjectToArray } from '../utils/homogenousObjectToArray';
 
-interface ISessionExercisesOwnProps {
-  readonly exercises: ISessionExercise[];
+interface ISessionExercisesProps {
+  readonly exercises: IHomogenousObject<ISessionExercise>;
 }
 
-export class SessionExercises extends React.PureComponent<ISessionExercisesOwnProps> {
-  render() {
-    return (
-      <FlatList
-        data={this.props.exercises}
-        renderItem={({ item }) => <SessionExercise exercise={item} />}
-      />
-    );
-  }
-}
+export const SessionExercises: React.SFC<ISessionExercisesProps> = ({ exercises }) =>
+  <FlatList
+    data={homogenousObjectToArray(exercises)}
+    renderItem={({ item }: ListRenderItemInfo<ISessionExercise>) => <SessionExercise exerciseId={item.exercise} />}
+    keyExtractor={item => item.id}
+  />;

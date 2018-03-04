@@ -19,7 +19,7 @@ const forSchema = (): IExerciseSchemaProps => ({
 });
 
 const mapDispatchToProps = (dispatch: Dispatch<IAppState>): INewExerciseFormCallbackProps => ({
-  addExercise: () => dispatch(addExerciseAsync(forSchema())),
+  addExercise: () => dispatch((addExerciseAsync(forSchema()) as any)),
 });
 
 export const NewExerciseForm: React.ComponentClass = connect(

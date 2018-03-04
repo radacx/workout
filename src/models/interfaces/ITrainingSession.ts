@@ -1,11 +1,7 @@
 import { Guid } from '../Guid';
 import { IExercise } from './IExercise';
 import { IHomogenousObject } from './IHomogenousObject';
-
-export enum ExerciseType {
-  Reps = 'Reps',
-  Duration = 'Duration',
-}
+import { TrainingSet } from '../TrainingSet';
 
 export interface ITempo {
   readonly eccentric: number;
@@ -28,8 +24,6 @@ export interface ITrainingSet {
   readonly rest: number;
   readonly weight?: number;
 }
-
-type TrainingSet = ITrainingSetForDuration | ITrainingSetForReps;
 
 export interface ISessionExercise {
   readonly id: Guid;

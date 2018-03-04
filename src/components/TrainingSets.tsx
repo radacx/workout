@@ -7,8 +7,7 @@ import {
   ITrainingSetForDuration,
   ITrainingSetForReps,
 } from '../models/interfaces/ITrainingSession';
-
-type TrainingSet = ITrainingSetForDuration | ITrainingSetForReps;
+import { TrainingSet } from '../models/TrainingSet';
 
 interface ITrainingSetsProps {
   readonly sets: TrainingSet[];

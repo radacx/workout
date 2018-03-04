@@ -13,10 +13,10 @@ import {
 import { IHomogenousObject } from '../../models/interfaces/IHomogenousObject';
 import { IScreen } from '../../models/interfaces/IScreen';
 import { dateUtils } from '../../utils/dateUtils';
-import { SessionExercisesList } from '../SessionExercisesList';
-import { Temp } from '../Temp';
 import { NumericInput } from '../NumericInput';
-import { TrainingSets } from '../TrainingSets';
+import { SessionExercisesList } from '../SessionExercisesList';
+import { IExercise } from '../../models/interfaces/IExercise';
+import { assign } from '../../utils/assign';
 
 interface IAddNewTrainingSessionState {
   readonly date: string;
@@ -68,6 +68,21 @@ export class AddNewTrainingSession extends React.PureComponent<AddNewTrainingSes
       date,
     });
 
+  _addExercise = (exercise: IExercise) =>
+    this.setState(({ exercises }) => ({
+      exercises: assign(exercises, exs => {
+        const id = new Date().getTime().toString();
+
+        exs[id] = {
+          exercise: exercise.id,
+          sets: {},
+          id,
+        };
+
+        return exs;
+      })
+    }));
+
   render() {
     return (
       <View>
@@ -90,44 +105,10 @@ export class AddNewTrainingSession extends React.PureComponent<AddNewTrainingSes
           onDateChange={this._onDateChanged}
         />
 
-        <TrainingSets sets={[
-          {
-            id: '1',
-            duration: 100,
-            rest: 20,
-          },
-          {
-            id: '2',
-            duration: 8,
-            weight: 40,
-            rest: 20,
-          },
-          {
-            id: '3',
-            reps: 15,
-            rest: 20,
-          },
-        ]}/>
-
-        <Temp exercises={[
-          {
-            id: '44',
-            name: 'dsada',
-            planesOfMovement: [],
-            primaryMuscleGroups: [],
-            secondaryMuscleGroups: [],
-          },
-          {
-            id: '55',
-            name: 'dsada2',
-            planesOfMovement: [],
-            primaryMuscleGroups: [],
-            secondaryMuscleGroups: [],
-            relativeBodyweight: 50,
-          },
-        ]} />
-
-        <SessionExercisesList exercises={Object.keys(this.state.exercises).map(key => this.state.exercises[key])}/>
+        <SessionExercisesList
+          exercises={this.state.exercises}
+          addExercise={this._addExercise}
+        />
 
         <Button
           title="add"

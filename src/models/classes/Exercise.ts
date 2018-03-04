@@ -6,6 +6,7 @@ import { defaultUuid } from '../../constants/defaultUuid';
 import { Guid } from '../Guid';
 import { MuscleGroup } from '../enums/MuscleGroup';
 import { MovementPlane } from '../enums/MovementPlane';
+import { ExerciseType } from '../enums/ExerciseType';
 
 export interface IExerciseSchemaProps {
   id: Guid;
@@ -17,6 +18,7 @@ export interface IExerciseSchemaProps {
 const defaultValues: IExercise = {
   id: defaultUuid,
   name: 'HEHE',
+  exerciseType: ExerciseType.Reps,
   primaryMuscleGroups: [],
   secondaryMuscleGroups: [],
   planesOfMovement: [],

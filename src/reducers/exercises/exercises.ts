@@ -15,6 +15,7 @@ import {
   EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
+import { ExerciseType } from '../../models/enums/ExerciseType';
 
 type State = IHomogenousObject<IExercise>;
 
@@ -44,8 +45,25 @@ const removeExercise = (state: State, { payload }: RemoveExerciseAction): State 
     },
   );
 
-const initialState: State = {};
-
+//  const initialState: State = {};
+const initialState: State = {
+  '1': {
+    name: 'Exercise 1',
+    id: '1',
+    primaryMuscleGroups: [],
+    exerciseType: ExerciseType.Reps,
+    planesOfMovement: [],
+    secondaryMuscleGroups: [],
+  },
+  '2': {
+    name: 'Exercise 2',
+    id: '2',
+    primaryMuscleGroups: [],
+    exerciseType: ExerciseType.Duration,
+    planesOfMovement: [],
+    secondaryMuscleGroups: [],
+  },
+};
 
 export const exercises = (state: State = initialState, action: AppAction): State => {
   switch (action.type) {

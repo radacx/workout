@@ -1,50 +1,45 @@
 import * as React from 'react';
-import {
-  Text,
-  View,
-  Picker,
-} from 'react-native';
-import { Exercise } from '../models/Exercise';
+import { Picker } from 'react-native';
 
-interface IProps {
-  readonly exercises: Exercise[];
+interface IComboBoxProps<T> {
+  readonly items: T[];
+  readonly getLabel: (item: T) => string;
+  readonly onItemChange: (item: T) => void;
 }
 
-interface IState {
-  readonly selectedExercise: Exercise;
+interface IComboBoxState<T> {
+  readonly selectedItem: T;
 }
 
-export class Temp extends React.PureComponent<IProps, IState> {
-  state: IState = {
-    selectedExercise: this.props.exercises[0],
+export class ComboBox<T> extends React.PureComponent<IComboBoxProps<T>, IComboBoxState<T>> {
+  state: IComboBoxState<T> = {
+    selectedItem: this.props.items[0],
   };
 
-  _selectedExerciseChanged = (exercise: Exercise) =>
+  _selectedItemChanged = (item: T) => {
     this.setState({
-      selectedExercise: exercise,
+      selectedItem: item,
     });
 
+    this.props.onItemChange(item);
+  };
+
   render() {
-    const pickerValues = this.props.exercises.map((exercise, index) =>
+    const pickerValues = this.props.items.map((item, index) =>
       <Picker.Item
         key={index}
-        label={exercise.name}
-        value={exercise}
+        label={this.props.getLabel(item)}
+        value={item}
       />
     );
 
     return (
-      <View>
-        <Text>
-          Exercise
-        </Text>
-        <Picker
-          selectedValue={this.state.selectedExercise}
-          onValueChange={this._selectedExerciseChanged}
-        >
-          {pickerValues}
-        </Picker>
-      </View>
+      <Picker
+        selectedValue={this.state.selectedItem}
+        onValueChange={this._selectedItemChanged}
+      >
+        {pickerValues}
+      </Picker>
     );
   }
 }
