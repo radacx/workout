@@ -8,7 +8,7 @@ interface ILoaderState {
 export class Loader extends React.PureComponent<{}, ILoaderState> {
   intervalId: number;
 
-  state: ILoaderState = {
+  readonly state: ILoaderState = {
     counter: 0,
   };
 

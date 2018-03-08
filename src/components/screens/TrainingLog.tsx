@@ -5,20 +5,19 @@ import {
   Button,
   View,
 } from 'react-native';
-import { AddNewTrainingSession } from './AddNewTrainingSession';
-import { INavigationProps } from '../../models/interfaces/INavigationProps';
+import { Navigator } from 'react-native-navigation';
 import { IScreen } from '../../models/interfaces/IScreen';
+import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
 
-type TrainingLogProps = IScreen;
+export let NavigationManager: Navigator;
 
-export class TrainingLog extends React.PureComponent<TrainingLogProps> {
-  static NavigationProps: INavigationProps = {
-    title: 'Training log',
-    screen: 'TrainingLog',
-  };
-
+export class TrainingLog extends React.PureComponent<IScreen> {
   _navigateToAddNewSession = () =>
-    this.props.navigator.push(AddNewTrainingSession.NavigationProps);
+    this.props.navigator.push(componentsWithNavigationProps.AddNewTrainingSession.navigationProps);
+
+  componentDidMount() {
+    NavigationManager = this.props.navigator;
+  }
 
   render() {
     return (

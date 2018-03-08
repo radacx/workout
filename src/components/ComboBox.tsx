@@ -12,7 +12,7 @@ interface IComboBoxState<T> {
 }
 
 export class ComboBox<T> extends React.PureComponent<IComboBoxProps<T>, IComboBoxState<T>> {
-  state: IComboBoxState<T> = {
+  readonly state: IComboBoxState<T> = {
     selectedItem: this.props.items[0],
   };
 

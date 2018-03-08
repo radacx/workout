@@ -14,7 +14,7 @@ interface INumericInputState {
 }
 
 export class NumericInput extends React.PureComponent<INumericInputProps, INumericInputState> {
-  state: INumericInputState = {
+  readonly state: INumericInputState = {
     number: this.props.initialNumber ? this.props.initialNumber.toString() : '',
   };
 

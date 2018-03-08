@@ -1,21 +1,43 @@
 import * as React from 'react';
-import { View } from 'react-native';
+import {
+  Button,
+  View,
+} from 'react-native';
 import { SessionExercises } from './SessionExercises';
 import { ISessionExercise } from '../models/interfaces/ITrainingSession';
 import { IHomogenousObject } from '../models/interfaces/IHomogenousObject';
-import { SessionExerciseForm } from '../containers/SessionExerciseForm';
-import { IExercise } from '../models/interfaces/IExercise';
+import { NavigationManager } from './screens/TrainingLog';
+import { createNavigationProps } from '../utils/createNavigationProps';
+import { Guid } from '../models/Guid';
+import { componentsWithNavigationProps } from '../utils/componentsWithNavigationProps';
 
-interface ISessionExercisesListProps {
-  readonly exercises: IHomogenousObject<ISessionExercise>;
-  readonly addExercise: (exercise: IExercise) => void;
+export interface SessionExercisesListOwnProps {
+  sessionId: Guid;
 }
 
-export class SessionExercisesList extends React.PureComponent<ISessionExercisesListProps> {
+export interface SessionExercisesListDataProps {
+  readonly exercises: IHomogenousObject<ISessionExercise>;
+}
+
+type Props = SessionExercisesListOwnProps & SessionExercisesListDataProps;
+
+export class SessionExercisesList extends React.PureComponent<Props> {
   render() {
     return (
       <View>
-        <SessionExerciseForm addExercise={this.props.addExercise} />
+        <Button
+          title="Add exercise"
+          onPress={() => NavigationManager.showModal(
+            createNavigationProps(componentsWithNavigationProps.SessionExerciseForm)
+            ({
+              navigatorStyle: {
+                screenBackgroundColor: 'white',
+              },
+              passProps: {
+                sessionId: this.props.sessionId,
+              },
+            }))}
+        />
         <SessionExercises exercises={this.props.exercises}/>
       </View>
     );

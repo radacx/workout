@@ -18,14 +18,10 @@ interface IMultiSelectState {
 export class MultiSelect extends React.PureComponent<IMultiSelectProps, IMultiSelectState> {
   static displayName = 'MultiSelect';
 
-  constructor(props: IMultiSelectProps) {
-    super(props);
-
-    this.state = {
-      options: Array(props.options.length)
-        .fill(false),
-    };
-  }
+  readonly state: IMultiSelectState = {
+    options: Array(this.props.options.length)
+      .fill(false),
+  };
 
   _changeChecked = (index: number): void =>
     this.setState(({ options }) => ({

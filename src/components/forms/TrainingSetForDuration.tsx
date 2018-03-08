@@ -7,7 +7,7 @@ import {
 import { NumericInput } from '../NumericInput';
 import { ITrainingSetForDuration } from '../../models/interfaces/ITrainingSession';
 
-interface ITrainingSetForDurationProps {
+export interface TrainingSetForDurationCallbackProps {
   readonly onAddSet: (set: ITrainingSetForDuration) => void;
 }
 
@@ -17,7 +17,7 @@ interface ITrainingSetForDurationState {
   readonly weight?: number;
 }
 
-export class TrainingSetForDuration extends React.PureComponent<ITrainingSetForDurationProps, ITrainingSetForDurationState> {
+export class TrainingSetForDuration extends React.PureComponent<TrainingSetForDurationCallbackProps, ITrainingSetForDurationState> {
   _durationChanged = (duration: number) =>
     this.setState({
       duration,

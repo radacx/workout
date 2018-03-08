@@ -1,11 +1,18 @@
 import React from 'react';
-import { View } from 'react-native';
+import {
+  Button,
+  View,
+} from 'react-native';
 import { TrainingSets } from './TrainingSets';
-import { TrainingSetForDuration } from './forms/TrainingSetForDuration';
-import { TrainingSetForReps } from './forms/TrainingSetForReps';
 import { assign } from '../utils/assign';
 import { TrainingSet } from '../models/TrainingSet';
 import { ExerciseType } from '../models/enums/ExerciseType';
+import { NavigationManager } from './screens/TrainingLog';
+import { createNavigationProps } from '../utils/createNavigationProps';
+import {
+  ComponentWithNavigationProps,
+} from '../models/ComponentWithNavigationProps';
+import { componentsWithNavigationProps } from '../utils/componentsWithNavigationProps';
 
 interface ITrainingSetsListProps {
   readonly exerciseType: ExerciseType;
@@ -16,7 +23,7 @@ interface ITrainingSetsListState {
 }
 
 export class TrainingSetsList extends React.PureComponent<ITrainingSetsListProps, ITrainingSetsListState> {
-  state: ITrainingSetsListState = {
+  readonly state: ITrainingSetsListState = {
     sets: [],
   };
 
@@ -26,12 +33,21 @@ export class TrainingSetsList extends React.PureComponent<ITrainingSetsListProps
     }));
 
   render() {
+    const con: ComponentWithNavigationProps<any> = this.props.exerciseType === ExerciseType.Duration ?
+      componentsWithNavigationProps.TrainingSetForDuration :
+      componentsWithNavigationProps.TrainingSetForReps;
+
     return (
       <View>
-        {this.props.exerciseType === ExerciseType.Duration ?
-          <TrainingSetForDuration onAddSet={this._addSet}/> :
-          <TrainingSetForReps onAddSet={this._addSet}/>
-        }
+        <Button
+          title="Add set"
+          onPress={() => NavigationManager.showModal(createNavigationProps(con)({
+            passProps: {},
+            navigatorStyle: {
+              screenBackgroundColor: 'white',
+            },
+          }))}
+        />
         <TrainingSets sets={this.state.sets} />
       </View>
     );

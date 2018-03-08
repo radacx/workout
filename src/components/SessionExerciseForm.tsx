@@ -3,25 +3,37 @@ import {
   Button,
   View,
 } from 'react-native';
-import { ComboBox } from './Temp';
+import { ComboBox } from './ComboBox';
 import { IExercise } from '../models/interfaces/IExercise';
+import { NavigationManager } from './screens/TrainingLog';
+import { ISessionExercise } from '../models/interfaces/ITrainingSession';
+import { Guid } from '../models/Guid';
+import {
+  WithZanorenie,
+  Zanorenie,
+} from '../models/interfaces/With';
 
-export interface ISessionExerciseFormDataProps {
+export interface SessionExerciseFormDataProps {
+  readonly zanorenie: Zanorenie;
   readonly exercises: IExercise[];
 }
 
-export interface ISessionExerciseFormOwnProps {
-  readonly addExercise: (exercise: IExercise) => void;
+export interface SessionExerciseFormCallbackProps {
+  readonly addExercise: (exerciseWith: WithZanorenie<ISessionExercise>) => void;
 }
 
-type SessionExerciseFormProps = ISessionExerciseFormDataProps & ISessionExerciseFormOwnProps;
+export interface SessionExerciseFormOwnProps {
+  readonly sessionId: Guid;
+}
+
+type SessionExerciseFormProps = SessionExerciseFormDataProps & SessionExerciseFormCallbackProps & SessionExerciseFormOwnProps;
 
 interface ISessionExerciseFormState {
   readonly selectedExercise: IExercise;
 }
 
 export class SessionExerciseForm extends React.PureComponent<SessionExerciseFormProps, ISessionExerciseFormState> {
-  state: ISessionExerciseFormState = {
+  readonly state: ISessionExerciseFormState = {
     selectedExercise: this.props.exercises[0],
   };
 
@@ -33,8 +45,19 @@ export class SessionExerciseForm extends React.PureComponent<SessionExerciseForm
   _getExerciseLabel = (exercise: IExercise) =>
     exercise.name;
 
-  _submitExercise = () =>
-    this.props.addExercise(this.state.selectedExercise);
+  _submitExercise = () => {
+    const sessionExercise: ISessionExercise = {
+      id: new Date().getTime().toString(),
+      sets: {},
+      exercise: this.state.selectedExercise.id,
+    };
+
+    this.props.addExercise({
+      item: sessionExercise,
+      zanorenie: this.props.zanorenie,
+    });
+    NavigationManager.dismissModal();
+  };
 
   render() {
     return (
