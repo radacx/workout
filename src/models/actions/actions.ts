@@ -4,6 +4,9 @@ import {
   EXERCISE_UPDATED,
   SESSION_ADDED,
   SESSION_EXERCISE_ADDED,
+  SESSION_UPDATED,
+  SET_EXERCISE_ID,
+  SET_SESSION_ID,
   TRAINING_SET_ADDED,
 } from '../../constants/actionTypes';
 import { IExercise } from '../interfaces/IExercise';
@@ -12,8 +15,9 @@ import {
   ISessionExercise,
   ITrainingSession,
 } from '../interfaces/ITrainingSession';
-import { Zanorenie } from '../interfaces/With';
 import { TrainingSet } from '../TrainingSet';
+import { IFormIds } from '../interfaces/IFormIds';
+import { IUpdatedSession } from '../interfaces/IUpdatedSession';
 
 export class AddExerciseAction {
   readonly type = EXERCISE_ADDED;
@@ -43,11 +47,18 @@ export class AddTrainingSession {
   }) {}
 }
 
+export class UpdateTrainingSession {
+  readonly type = SESSION_UPDATED;
+  constructor (public payload: {
+    session: IUpdatedSession,
+  }) {}
+}
+
 export class AddSessionExercise {
   readonly type = SESSION_EXERCISE_ADDED;
   constructor (public payload: {
     sessionExercise: ISessionExercise,
-    zanorenie: Zanorenie,
+    formIds: IFormIds,
   }) {}
 }
 
@@ -55,14 +66,20 @@ export class AddTrainingSet {
   readonly type = TRAINING_SET_ADDED;
   constructor (public payload: {
     trainingSet: TrainingSet,
-    zanorenie: Zanorenie,
+    formIds: IFormIds,
   }) {}
 }
 
-type actions = [
-  AddExerciseAction,
-  UpdateExerciseAction,
-  RemoveExerciseAction
-];
+export class SetSessionId {
+  readonly type = SET_SESSION_ID;
+  constructor (public payload: {
+    sessionId: Guid,
+  }) {}
+}
 
-export type AppAction = actions[number];
+export class SetExerciseId {
+  readonly type = SET_EXERCISE_ID;
+  constructor (public payload: {
+    exerciseId: Guid,
+  }) {}
+}

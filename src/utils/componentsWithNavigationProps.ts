@@ -1,38 +1,39 @@
-import { TrainingSetForReps } from '../components/forms/TrainingSetForReps';
-import { TrainingSetForDuration } from '../components/forms/TrainingSetForDuration';
 import {
   SessionExerciseForm,
 } from '../containers/SessionExerciseForm';
-import { AddNewTrainingSession } from '../containers/AddNewTrainingSession';
-import { TrainingLog } from '../components/screens/TrainingLog';
+import { TrainingSessionForm } from '../containers/TrainingSessionForm';
+import { TrainingLog } from '../containers/TrainingLog';
+import { TrainingSetForDuration } from '../containers/TrainingSetForDuration';
+import { TrainingSetForReps } from '../containers/TrainingSetForReps';
+import { SessionExercisesList } from '../containers/SessionExercisesList';
 
 export const componentsWithNavigationProps = {
   TrainingSetForReps: {
     component: TrainingSetForReps,
     navigationProps: {
-      screen: 'Component.TrainingSetForReps',
+      screen: 'Container.TrainingSetForReps',
       title: 'Add set'
     },
   },
   TrainingSetForDuration: {
     component: TrainingSetForDuration,
     navigationProps: {
-      screen: 'Component.TrainingSetForDuration',
+      screen: 'Container.TrainingSetForDuration',
       title: 'Add set',
     },
   },
   TrainingLog: {
     component: TrainingLog,
     navigationProps: {
-      screen: 'Component.TrainingLog',
+      screen: 'Container.TrainingLog',
       title: 'Training log',
     },
   },
-  AddNewTrainingSession: {
-    component: AddNewTrainingSession,
+  TrainingSessionForm: {
+    component: TrainingSessionForm,
     navigationProps: {
-      screen: 'Container.AddNewTrainingSession',
-      title: 'New training session '
+      screen: 'Container.TrainingSessionForm',
+      title: 'Training session form'
     }
   },
   SessionExerciseForm: {
@@ -40,6 +41,13 @@ export const componentsWithNavigationProps = {
     navigationProps: {
       screen: 'Container.SessionExerciseForm',
       title: 'Session exercise form',
+    },
+  },
+  SessionExercisesList: {
+    component: SessionExercisesList,
+    navigationProps: {
+      screen: 'Container.SessionExercisesList',
+      title: 'Training session',
     },
   },
 };

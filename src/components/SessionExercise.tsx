@@ -3,25 +3,25 @@ import {
   Text,
   View,
 } from 'react-native';
-import { ISessionExercise } from '../models/interfaces/ITrainingSession';
-import { TrainingSetsList } from './TrainingSetsList';
+import { TrainingSetsList } from '../containers/TrainingSetsList';
 import { ExerciseType } from '../models/enums/ExerciseType';
-
-export interface ISessionExerciseOwnProps {
-  readonly exerciseId: ISessionExercise['exercise'];
-}
+import { ISessionExercise } from '../models/interfaces/ITrainingSession';
 
 export interface ISessionExerciseDataProps {
   readonly exerciseName: string;
   readonly exerciseType: ExerciseType;
 }
 
-type SessionExerciseProps = ISessionExerciseOwnProps & ISessionExerciseDataProps;
+export interface ISessionExerciseOwnProps {
+  readonly sessionExerciseId: ISessionExercise['id'];
+}
 
-export const SessionExercise: React.SFC<SessionExerciseProps> = ({ exerciseName, exerciseType }) =>
+type SessionExerciseProps = ISessionExerciseDataProps & ISessionExerciseOwnProps;
+
+export const SessionExercise: React.SFC<SessionExerciseProps> = ({ exerciseName, exerciseType, sessionExerciseId }) =>
   <View>
     <Text>
       {exerciseName}
     </Text>
-    <TrainingSetsList exerciseType={exerciseType} />
+    <TrainingSetsList exerciseType={exerciseType} exerciseId={sessionExerciseId} />
   </View>;

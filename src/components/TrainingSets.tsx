@@ -9,7 +9,7 @@ import {
 } from '../models/interfaces/ITrainingSession';
 import { TrainingSet } from '../models/TrainingSet';
 
-interface ITrainingSetsProps {
+export interface ITrainingSetsDataProps {
   readonly sets: TrainingSet[];
 }
 
@@ -35,7 +35,7 @@ const setToString = (tSet: TrainingSet) => {
   return `${weightString}${trainingSetToString(tSet)}`;
 };
 
-export class TrainingSets extends React.PureComponent<ITrainingSetsProps> {
+export class TrainingSets extends React.PureComponent<ITrainingSetsDataProps> {
   render() {
     return (
       <View>

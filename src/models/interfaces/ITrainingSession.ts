@@ -33,7 +33,7 @@ export interface ISessionExercise {
 
 export interface ITrainingSession {
   readonly id: Guid;
-  readonly date: Date;
+  readonly date: number;
   readonly bodyweight: number;
   readonly exercises: IHomogenousObject<ISessionExercise>;
 }

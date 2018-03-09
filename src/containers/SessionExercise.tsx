@@ -6,8 +6,13 @@ import {
 } from '../components/SessionExercise';
 import { IAppState } from '../models/state/IAppState';
 import { ComponentClass } from 'react';
+import { ISessionExercise } from '../models/interfaces/ITrainingSession';
 
-const mapStateToProps = (state: IAppState, { exerciseId }: ISessionExerciseOwnProps): ISessionExerciseDataProps => {
+interface SessionExerciseContainerProps extends ISessionExerciseOwnProps {
+  readonly exerciseId: ISessionExercise['exercise'];
+}
+
+const mapStateToProps = (state: IAppState, { exerciseId }: SessionExerciseContainerProps): ISessionExerciseDataProps => {
   const exercise = state.exercises[exerciseId];
 
   return {
@@ -16,6 +21,6 @@ const mapStateToProps = (state: IAppState, { exerciseId }: ISessionExerciseOwnPr
   };
 };
 
-export const SessionExercise: ComponentClass<ISessionExerciseOwnProps> = connect(
+export const SessionExercise: ComponentClass<SessionExerciseContainerProps> = connect(
   mapStateToProps,
 )(SessionExerciseComponent);

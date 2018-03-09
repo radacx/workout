@@ -6,7 +6,6 @@ import {
 } from '../../utils/assign';
 import {
   AddExerciseAction,
-  AppAction,
   RemoveExerciseAction,
   UpdateExerciseAction,
 } from '../../models/actions/actions';
@@ -31,9 +30,8 @@ const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction)
 const updateExercise = (state: State, { payload }: UpdateExerciseAction): State =>
   assignWithGet(
     state,
-    (st, id) => st[id],
+    st => st[payload.exercise.id],
     () => payload.exercise,
-    payload.exercise.id,
   );
 
 const removeExercise = (state: State, { payload }: RemoveExerciseAction): State =>
@@ -65,7 +63,7 @@ const initialState: State = {
   },
 };
 
-export const exercises = (state: State = initialState, action: AppAction): State => {
+export const exercises = (state: State = initialState, action: any): State => {
   switch (action.type) {
     case EXERCISE_ADDED:
       return addExercise(state, action);

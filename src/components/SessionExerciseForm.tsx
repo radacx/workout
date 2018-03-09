@@ -7,26 +7,16 @@ import { ComboBox } from './ComboBox';
 import { IExercise } from '../models/interfaces/IExercise';
 import { NavigationManager } from './screens/TrainingLog';
 import { ISessionExercise } from '../models/interfaces/ITrainingSession';
-import { Guid } from '../models/Guid';
-import {
-  WithZanorenie,
-  Zanorenie,
-} from '../models/interfaces/With';
 
 export interface SessionExerciseFormDataProps {
-  readonly zanorenie: Zanorenie;
   readonly exercises: IExercise[];
 }
 
 export interface SessionExerciseFormCallbackProps {
-  readonly addExercise: (exerciseWith: WithZanorenie<ISessionExercise>) => void;
+  readonly addExercise: (exercise: ISessionExercise) => void;
 }
 
-export interface SessionExerciseFormOwnProps {
-  readonly sessionId: Guid;
-}
-
-type SessionExerciseFormProps = SessionExerciseFormDataProps & SessionExerciseFormCallbackProps & SessionExerciseFormOwnProps;
+export type SessionExerciseFormProps = SessionExerciseFormDataProps & SessionExerciseFormCallbackProps;
 
 interface ISessionExerciseFormState {
   readonly selectedExercise: IExercise;
@@ -52,10 +42,7 @@ export class SessionExerciseForm extends React.PureComponent<SessionExerciseForm
       exercise: this.state.selectedExercise.id,
     };
 
-    this.props.addExercise({
-      item: sessionExercise,
-      zanorenie: this.props.zanorenie,
-    });
+    this.props.addExercise(sessionExercise);
     NavigationManager.dismissModal();
   };
 

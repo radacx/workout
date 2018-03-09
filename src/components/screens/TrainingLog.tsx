@@ -8,12 +8,40 @@ import {
 import { Navigator } from 'react-native-navigation';
 import { IScreen } from '../../models/interfaces/IScreen';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
+import { ITrainingSession } from '../../models/interfaces/ITrainingSession';
+import { createNavigationProps } from '../../utils/createNavigationProps';
 
 export let NavigationManager: Navigator;
 
-export class TrainingLog extends React.PureComponent<IScreen> {
-  _navigateToAddNewSession = () =>
-    this.props.navigator.push(componentsWithNavigationProps.AddNewTrainingSession.navigationProps);
+export interface TrainingLogCallbackProps {
+  readonly addNewTrainingSession: (session: ITrainingSession) => void;
+}
+
+type Props = IScreen & TrainingLogCallbackProps;
+
+export class TrainingLog extends React.PureComponent<Props> {
+  _navigateToSessionForm = () => {
+    const session: ITrainingSession = {
+      id: new Date().getTime().toString(),
+      exercises: {},
+      date: new Date().getTime(),
+      bodyweight: 0,
+    };
+
+    NavigationManager.push(
+      {
+        ...createNavigationProps(
+          componentsWithNavigationProps.TrainingSessionForm)(
+          {
+            passProps: {
+              sessionId: session.id,
+            },
+          }),
+         animated: false,
+      });
+
+    this.props.addNewTrainingSession(session);
+  };
 
   componentDidMount() {
     NavigationManager = this.props.navigator;
@@ -24,7 +52,7 @@ export class TrainingLog extends React.PureComponent<IScreen> {
       <View>
         <Button
           title="Add new session"
-          onPress={this._navigateToAddNewSession}
+          onPress={this._navigateToSessionForm}
         />
         <ComponentList
           getIdsFromState={state => state.sessions}

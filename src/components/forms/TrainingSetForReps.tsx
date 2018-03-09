@@ -6,8 +6,9 @@ import {
 } from 'react-native';
 import { NumericInput } from '../NumericInput';
 import { ITrainingSetForReps } from '../../models/interfaces/ITrainingSession';
+import { NavigationManager } from '../screens/TrainingLog';
 
-interface ITrainingSetForDurationProps {
+export interface ITrainingSetForDurationCallbackProps {
   readonly onAddSet: (set: ITrainingSetForReps) => void;
 }
 
@@ -17,7 +18,7 @@ interface ITrainingSetForRepsState {
   readonly weight?: number;
 }
 
-export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurationProps, ITrainingSetForRepsState> {
+export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurationCallbackProps, ITrainingSetForRepsState> {
   _repsChanged = (reps: number) =>
     this.setState({
       reps,
@@ -33,13 +34,18 @@ export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurat
       weight,
     });
 
-  _onSubmit = () =>
-    this.props.onAddSet({
+  _onSubmit = () => {
+    const set: ITrainingSetForReps = {
       rest: this.state.rest,
       weight: this.state.weight,
       reps: this.state.reps,
       id: new Date().getTime().toString(),
-    });
+    };
+
+    this.props.onAddSet(set);
+
+    NavigationManager.dismissModal();
+  };
 
   render() {
     return(

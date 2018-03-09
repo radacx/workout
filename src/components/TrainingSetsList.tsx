@@ -3,9 +3,6 @@ import {
   Button,
   View,
 } from 'react-native';
-import { TrainingSets } from './TrainingSets';
-import { assign } from '../utils/assign';
-import { TrainingSet } from '../models/TrainingSet';
 import { ExerciseType } from '../models/enums/ExerciseType';
 import { NavigationManager } from './screens/TrainingLog';
 import { createNavigationProps } from '../utils/createNavigationProps';
@@ -13,42 +10,44 @@ import {
   ComponentWithNavigationProps,
 } from '../models/ComponentWithNavigationProps';
 import { componentsWithNavigationProps } from '../utils/componentsWithNavigationProps';
+import { Guid } from '../models/Guid';
+import { TrainingSets } from '../containers/TrainingSets';
 
-interface ITrainingSetsListProps {
+export interface ITrainingSetsListOwnProps {
   readonly exerciseType: ExerciseType;
+  readonly exerciseId: Guid;
 }
 
-interface ITrainingSetsListState {
-  readonly sets: TrainingSet[];
+export interface TrainingSetsListCallbackProps {
+  readonly setExerciseId: (id: Guid) => void;
 }
 
-export class TrainingSetsList extends React.PureComponent<ITrainingSetsListProps, ITrainingSetsListState> {
-  readonly state: ITrainingSetsListState = {
-    sets: [],
-  };
+type Props = ITrainingSetsListOwnProps & TrainingSetsListCallbackProps;
 
-  _addSet = (set: TrainingSet) =>
-    this.setState(({ sets }) => ({
-      sets: assign(sets, sts => sts.concat(set)),
-    }));
-
-  render() {
+export class TrainingSetsList extends React.PureComponent<Props> {
+  _openNewSetForm = () => {
     const con: ComponentWithNavigationProps<any> = this.props.exerciseType === ExerciseType.Duration ?
       componentsWithNavigationProps.TrainingSetForDuration :
       componentsWithNavigationProps.TrainingSetForReps;
 
+    this.props.setExerciseId(this.props.exerciseId);
+
+    NavigationManager.showModal(createNavigationProps(con)({
+      passProps: {},
+      navigatorStyle: {
+        screenBackgroundColor: 'white',
+      },
+    }));
+  };
+
+  render() {
     return (
       <View>
         <Button
           title="Add set"
-          onPress={() => NavigationManager.showModal(createNavigationProps(con)({
-            passProps: {},
-            navigatorStyle: {
-              screenBackgroundColor: 'white',
-            },
-          }))}
+          onPress={this._openNewSetForm}
         />
-        <TrainingSets sets={this.state.sets} />
+        <TrainingSets exerciseId={this.props.exerciseId} />
       </View>
     );
   }

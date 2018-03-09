@@ -11,9 +11,15 @@ export const dateUtils = Object.freeze({
       date.getFullYear(),
     ].join('.'),
 
+  toStringFromNumber: (dateNum: number) =>
+    dateUtils.toString(new Date(dateNum)),
+
   fromText: (text: string) => {
     const temp = text.split('.');
 
     return new Date(Date.UTC(+temp[2], +temp[1] - 1, +temp[0]));
-  }
+  },
+
+  fromTextToNumber: (text: string) =>
+    dateUtils.fromText(text).getTime(),
 });

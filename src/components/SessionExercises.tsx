@@ -15,6 +15,6 @@ interface ISessionExercisesProps {
 export const SessionExercises: React.SFC<ISessionExercisesProps> = ({ exercises }) =>
   <FlatList
     data={homogenousObjectToArray(exercises)}
-    renderItem={({ item }: ListRenderItemInfo<ISessionExercise>) => <SessionExercise exerciseId={item.exercise} />}
+    renderItem={({ item }: ListRenderItemInfo<ISessionExercise>) => <SessionExercise exerciseId={item.exercise} sessionExerciseId={item.id}  />}
     keyExtractor={item => item.id}
   />;
