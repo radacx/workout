@@ -1,4 +1,3 @@
-import { IExercise } from '../models/interfaces/IExercise';
 import {
   AddExerciseAction,
   AddSessionExercise,
@@ -18,13 +17,14 @@ import {
 import { TrainingSet } from '../models/TrainingSet';
 import { IFormIds } from '../models/interfaces/IFormIds';
 import { IUpdatedSession } from '../models/interfaces/IUpdatedSession';
+import { Exercise } from '../models/Exercise';
 
-export const addExercise = (exercise: IExercise) =>
+export const addExercise = (exercise: Exercise) =>
   new AddExerciseAction({
     exercise,
   });
 
-export const updateExercise = (exercise: IExercise) =>
+export const updateExercise = (exercise: Exercise) =>
   new UpdateExerciseAction({
     exercise,
   });

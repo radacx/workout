@@ -1,11 +1,14 @@
 import {
   SessionExerciseForm,
-} from '../containers/SessionExerciseForm';
-import { TrainingSessionForm } from '../containers/TrainingSessionForm';
-import { TrainingLog } from '../containers/TrainingLog';
-import { TrainingSetForDuration } from '../containers/TrainingSetForDuration';
-import { TrainingSetForReps } from '../containers/TrainingSetForReps';
-import { SessionExercisesList } from '../containers/SessionExercisesList';
+} from '../containers/training-log/SessionExerciseForm';
+import { TrainingSessionForm } from '../containers/training-log/TrainingSessionForm';
+import { TrainingLog } from '../containers/training-log/TrainingLog';
+import { TrainingSetForDuration } from '../containers/training-log/TrainingSetForDuration';
+import { TrainingSetForReps } from '../containers/training-log/TrainingSetForReps';
+import { SessionExercisesList } from '../containers/training-log/SessionExercisesList';
+import { ExercisesList } from '../components/exercises/ExercisesList';
+import { MultiSelect } from '../components/MultiSelect';
+import { NewExerciseForm } from '../containers/exercises/NewExerciseForm';
 
 export const componentsWithNavigationProps = {
   TrainingSetForReps: {
@@ -48,6 +51,27 @@ export const componentsWithNavigationProps = {
     navigationProps: {
       screen: 'Container.SessionExercisesList',
       title: 'Training session',
+    },
+  },
+  ExercisesList: {
+    component: ExercisesList,
+    navigationProps: {
+      screen: 'Components.List',
+      title: 'Exercises',
+    },
+  },
+  MultiSelect: {
+    component: MultiSelect,
+    navigationProps: {
+      screen: 'Component.MultiSelect',
+      title: 'Select',
+    },
+  },
+  NewExerciseForm: {
+    component: NewExerciseForm,
+    navigationProps: {
+      screen: 'Container.NewExerciseForm',
+      title: 'New exercise',
     },
   },
 };

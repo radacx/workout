@@ -5,7 +5,7 @@ import {
 } from 'react-redux';
 import { IAppState } from './models/state/IAppState';
 import { configureStoreForWixNavigation } from './utils/configureStore';
-import { registerScreens } from './components/screens/utils/registerScreens';
+import { registerScreens } from './components/screens/registerScreens';
 import { componentsWithNavigationProps } from './utils/componentsWithNavigationProps';
 
 const storeCallback = (provider: any) =>
@@ -16,8 +16,22 @@ const storeCallback = (provider: any) =>
       componentsWithNavigationProps,
     );
 
-    Navigation.startSingleScreenApp({
+    /*Navigation.startSingleScreenApp({
       screen: componentsWithNavigationProps.TrainingLog.navigationProps,
+    });*/
+    Navigation.startTabBasedApp({
+      tabs: [
+        {
+          ...componentsWithNavigationProps.TrainingLog.navigationProps,
+          label: 'Training log',
+          icon: require('./img/home.png'),
+        },
+        {
+          ...componentsWithNavigationProps.ExercisesList.navigationProps,
+          label: 'Exercises',
+          icon: require('./img/home.png'),
+        },
+      ],
     });
   };
 

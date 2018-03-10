@@ -53,7 +53,6 @@ export const configureStoreForWixNavigation = (callback: (store: Store<any>) => 
     ),
   );
 
-
   const persistor = persistStore(store, undefined, () => callback(store));
 
   return {
@@ -74,7 +73,7 @@ export const configureStore = () => {
   );
 
   const persistor = persistStore(store);
-
+  persistor.purge();
   return {
     store,
     persistor,

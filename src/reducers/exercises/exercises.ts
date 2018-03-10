@@ -2,7 +2,6 @@ import { IHomogenousObject } from '../../models/interfaces/IHomogenousObject';
 import { IExercise } from '../../models/interfaces/IExercise';
 import {
   assign,
-  assignWithGet,
 } from '../../utils/assign';
 import {
   AddExerciseAction,
@@ -14,9 +13,10 @@ import {
   EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
-import { ExerciseType } from '../../models/enums/ExerciseType';
 
 type State = IHomogenousObject<IExercise>;
+
+type Actions = AddExerciseAction | UpdateExerciseAction | RemoveExerciseAction;
 
 const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction): State =>
   assign(
@@ -27,11 +27,13 @@ const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction)
     }
   );
 
-const updateExercise = (state: State, { payload }: UpdateExerciseAction): State =>
-  assignWithGet(
+const updateExercise = (state: State, { payload: { exercise } }: UpdateExerciseAction): State =>
+  assign(
     state,
-    st => st[payload.exercise.id],
-    () => payload.exercise,
+    st => ({
+        ...st,
+        [ exercise.id ]: exercise,
+      }),
   );
 
 const removeExercise = (state: State, { payload }: RemoveExerciseAction): State =>
@@ -43,27 +45,9 @@ const removeExercise = (state: State, { payload }: RemoveExerciseAction): State 
     },
   );
 
-//  const initialState: State = {};
-const initialState: State = {
-  '1': {
-    name: 'Exercise 1',
-    id: '1',
-    primaryMuscleGroups: [],
-    exerciseType: ExerciseType.Reps,
-    planesOfMovement: [],
-    secondaryMuscleGroups: [],
-  },
-  '2': {
-    name: 'Exercise 2',
-    id: '2',
-    primaryMuscleGroups: [],
-    exerciseType: ExerciseType.Duration,
-    planesOfMovement: [],
-    secondaryMuscleGroups: [],
-  },
-};
+const initialState: State = {};
 
-export const exercises = (state: State = initialState, action: any): State => {
+export const exercises = (state: State = initialState, action: Actions): State => {
   switch (action.type) {
     case EXERCISE_ADDED:
       return addExercise(state, action);

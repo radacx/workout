@@ -9,7 +9,6 @@ import {
   SET_SESSION_ID,
   TRAINING_SET_ADDED,
 } from '../../constants/actionTypes';
-import { IExercise } from '../interfaces/IExercise';
 import { Guid } from '../Guid';
 import {
   ISessionExercise,
@@ -18,18 +17,19 @@ import {
 import { TrainingSet } from '../TrainingSet';
 import { IFormIds } from '../interfaces/IFormIds';
 import { IUpdatedSession } from '../interfaces/IUpdatedSession';
+import { Exercise } from '../Exercise';
 
 export class AddExerciseAction {
   readonly type = EXERCISE_ADDED;
   constructor (public payload: {
-    exercise: IExercise,
+    exercise: Exercise,
   }) {}
 }
 
 export class UpdateExerciseAction {
   readonly type = EXERCISE_UPDATED;
   constructor (public payload: {
-    exercise: IExercise,
+    exercise: Exercise,
   }) {}
 }
 
