@@ -4,6 +4,7 @@ import {
   Text,
   TextInput,
   Slider,
+  Switch,
 } from 'react-native';
 import React from 'react';
 const RadioForm = require('react-native-simple-radio-button').default;
@@ -15,8 +16,11 @@ import { NavigationManager } from './ExercisesList';
 import { createNavigationProps } from '../../utils/createNavigationProps';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
 import { Exercise } from '../../models/Exercise';
-import { CheckBox } from 'react-native-elements';
 import { NumericInput } from '../NumericInput';
+import {
+  SpecialSelectOption,
+  SpecialSelectSelection,
+} from '../SpecialSelect';
 
 export interface INewExerciseFormCallbackProps {
   addExercise: (exercise: Exercise) => void;
@@ -47,9 +51,11 @@ const muscleGroups = Object
   .keys(MuscleGroup)
   .map((k: any) => MuscleGroup[ k ]);
 
-const movementPlanes = Object
-  .keys(MovementPlane)
-  .map((k: any) => MovementPlane[ k ]);
+const muscleGroupOptions = muscleGroups.map(muscleGroup => ({
+  label: muscleGroup,
+  leftValue: 'Primary',
+  rightValue: 'Secondary',
+}));
 
 export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbackProps, State> {
   static displayName = 'NewExerciseForm';
@@ -94,52 +100,60 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
       exerciseType,
     });
 
-  _primaryMuscleGroupsChanged = (primaryMuscleGroups: MuscleGroup[]) =>
+  _muscleGroupsSubmitted = (selectedOptions: SpecialSelectSelection[]) => {
+    const primaryMuscleGroups: MuscleGroup[] = [];
+    const secondaryMuscleGroups: MuscleGroup[] = [];
+
+    muscleGroups
+      .forEach((muscleGroup, index) => {
+        if (selectedOptions[index] === SpecialSelectSelection.Left) {
+          primaryMuscleGroups.push(muscleGroup as any);
+        } else if (selectedOptions[index] === SpecialSelectSelection.Right) {
+          secondaryMuscleGroups.push(muscleGroup as any);
+        }
+      });
+
     this.setState({
       primaryMuscleGroups,
-    });
-
-  _navigateToPrimaryMuscleGroups = () =>
-    this._navigateToMultiSelectedWithCallback(
-      muscleGroups,
-      this._primaryMuscleGroupsChanged,
-    );
-
-  _secondaryMuscleGroupsChanged = (secondaryMuscleGroups: MuscleGroup[]) =>
-    this.setState({
       secondaryMuscleGroups,
     });
+  };
 
-  _navigateToSecondaryMuscleGroups = () =>
-    this._navigateToMultiSelectedWithCallback(
-      muscleGroups,
-      this._secondaryMuscleGroupsChanged,
-    );
+  _getMuscleGroupPreselectedOptions = (): SpecialSelectSelection[] => {
+    const primaryMgs = this.state.primaryMuscleGroups.map(mg => mg.toString());
+    const secondaryMgs = this.state.secondaryMuscleGroups.map(mg => mg.toString());
 
-  _planesOfMovementChanged = (planesOfMovement: MovementPlane[]) =>
-    this.setState({
-      planesOfMovement,
+    return muscleGroups.map(mg => {
+      if (primaryMgs.indexOf(mg) !== -1) {
+        return SpecialSelectSelection.Left;
+      } else if (secondaryMgs.indexOf(mg) !== -1) {
+        return SpecialSelectSelection.Right;
+      } else {
+        return SpecialSelectSelection.Default;
+      }
     });
+  };
 
-  _navigateToPlanesOfMovement = () =>
-    this._navigateToMultiSelectedWithCallback(
-      movementPlanes,
-      this._planesOfMovementChanged,
-    );
+  _navigateToMuscleGroups = () =>
+    this._navigateToSpecialSelect(muscleGroupOptions, this._muscleGroupsSubmitted, this._getMuscleGroupPreselectedOptions);
 
-  _navigateToMultiSelectedWithCallback = <T extends any>(options: T[], callback: (results: T[]) => void) => {
-    NavigationManager.showModal(createNavigationProps(componentsWithNavigationProps.MultiSelect)({
-      passProps: {
-        options,
-        onSubmit: (result: T[]) => {
-          callback(result);
-          NavigationManager.dismissModal();
+  _navigateToSpecialSelect = (options: SpecialSelectOption[], onSubmit: (selectedOptions: SpecialSelectSelection[]) => void, getPreselectedOptions: () => SpecialSelectSelection[]) => {
+    NavigationManager.showModal(createNavigationProps(componentsWithNavigationProps.SpecialSelect)(
+      {
+        passProps: {
+          options,
+          preselectedOptions: getPreselectedOptions(),
+          onSubmit: (selectedOptions: SpecialSelectSelection[]) => {
+            onSubmit(selectedOptions);
+            NavigationManager.dismissModal();
+          },
+        },
+        navigatorStyle: {
+          screenBackgroundColor: 'white',
         },
       },
-      navigatorStyle: {
-        screenBackgroundColor: 'white',
-      },
-    }));
+      'Muscle groups',
+    ));
   };
 
   _isBodyweightChanged = () =>
@@ -163,10 +177,12 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
           onChangeText={this._nameChanged}
         />
 
-        <CheckBox
-          checked={this.state.isBodyweight}
-          title="Is bodyweight"
-          onPress={this._isBodyweightChanged}
+        <Text>
+          Is bodyweight
+        </Text>
+        <Switch
+          value={this.state.isBodyweight}
+          onValueChange={this._isBodyweightChanged}
         />
 
         {this.state.isBodyweight &&
@@ -201,16 +217,8 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
         />
 
         <Button
-          title="Primary muscle groups"
-          onPress={this._navigateToPrimaryMuscleGroups}
-        />
-        <Button
-          title="secondary muscle groups"
-          onPress={this._navigateToSecondaryMuscleGroups}
-        />
-        <Button
-          title="Planes of movement"
-          onPress={this._navigateToPlanesOfMovement}
+          title="Muscle groups"
+          onPress={this._navigateToMuscleGroups}
         />
 
         <Button

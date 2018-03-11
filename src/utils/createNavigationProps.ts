@@ -2,7 +2,8 @@ import { ComponentWithNavigationProps } from '../models/ComponentWithNavigationP
 import { Screen } from '../models/ComponentWithNavigationProps';
 
 export const createNavigationProps =
-  <T>(con: ComponentWithNavigationProps<T>) => (screen: Screen<T>) => ({
+  <T>(con: ComponentWithNavigationProps<T>) => (screen: Screen<T>, title?: string) => ({
   ...con.navigationProps,
   ...screen,
+  title: title || con.navigationProps.title,
 });

@@ -7,8 +7,8 @@ import { TrainingSetForDuration } from '../containers/training-log/TrainingSetFo
 import { TrainingSetForReps } from '../containers/training-log/TrainingSetForReps';
 import { SessionExercisesList } from '../containers/training-log/SessionExercisesList';
 import { ExercisesList } from '../components/exercises/ExercisesList';
-import { MultiSelect } from '../components/MultiSelect';
 import { NewExerciseForm } from '../containers/exercises/NewExerciseForm';
+import { SpecialSelect } from '../components/SpecialSelect';
 
 export const componentsWithNavigationProps = {
   TrainingSetForReps: {
@@ -60,18 +60,18 @@ export const componentsWithNavigationProps = {
       title: 'Exercises',
     },
   },
-  MultiSelect: {
-    component: MultiSelect,
-    navigationProps: {
-      screen: 'Component.MultiSelect',
-      title: 'Select',
-    },
-  },
   NewExerciseForm: {
     component: NewExerciseForm,
     navigationProps: {
       screen: 'Container.NewExerciseForm',
       title: 'New exercise',
+    },
+  },
+  SpecialSelect: {
+    component: SpecialSelect,
+    navigationProps: {
+      screen: 'Component.SpecialSelect',
+      title: 'Test',
     },
   },
 };
