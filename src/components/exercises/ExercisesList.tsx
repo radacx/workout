@@ -16,7 +16,7 @@ export class ExercisesList extends React.PureComponent<IScreen> {
   static displayName = 'ExercisesList';
 
   _navigateToNewExerciseForm = () => {
-    NavigationManager.push(componentsWithNavigationProps.NewExerciseForm.navigationProps);
+    NavigationManager.push(componentsWithNavigationProps.ExerciseForm.navigationProps);
   };
 
   componentDidMount() {

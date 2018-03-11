@@ -7,7 +7,7 @@ import { TrainingSetForDuration } from '../containers/training-log/TrainingSetFo
 import { TrainingSetForReps } from '../containers/training-log/TrainingSetForReps';
 import { SessionExercisesList } from '../containers/training-log/SessionExercisesList';
 import { ExercisesList } from '../components/exercises/ExercisesList';
-import { NewExerciseForm } from '../containers/exercises/NewExerciseForm';
+import { ExerciseForm } from '../containers/exercises/ExerciseForm';
 import { SpecialSelect } from '../components/SpecialSelect';
 
 export const componentsWithNavigationProps = {
@@ -60,11 +60,11 @@ export const componentsWithNavigationProps = {
       title: 'Exercises',
     },
   },
-  NewExerciseForm: {
-    component: NewExerciseForm,
+  ExerciseForm: {
+    component: ExerciseForm,
     navigationProps: {
-      screen: 'Container.NewExerciseForm',
-      title: 'New exercise',
+      screen: 'Container.ExerciseForm',
+      title: 'Modify Exercise',
     },
   },
   SpecialSelect: {

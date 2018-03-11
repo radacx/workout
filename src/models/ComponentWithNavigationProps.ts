@@ -3,10 +3,13 @@ import {
   NavigatorButtons,
   NavigatorStyle,
 } from 'react-native-navigation';
-import { ComponentClass } from 'react';
+import {
+  ComponentClass,
+  StatelessComponent,
+} from 'react';
 
 export type ComponentWithNavigationProps<S> = {
-  component: ComponentClass<S>,
+  component: ComponentClass<S> | StatelessComponent<S>,
   navigationProps: INavigationProps,
 };
 

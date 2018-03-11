@@ -21,10 +21,18 @@ import {
   SpecialSelectOption,
   SpecialSelectSelection,
 } from '../SpecialSelect';
+import { IBodyweightExercise } from '../../models/interfaces/ITrainingSession';
 
-export interface INewExerciseFormCallbackProps {
+export interface ExerciseFormCallbackProps {
   addExercise: (exercise: Exercise) => void;
+  updateExercise: (exercise: Exercise) => void;
 }
+
+export interface ExerciseFormDataProps {
+  exercise?: Exercise;
+}
+
+type Props = ExerciseFormCallbackProps & ExerciseFormDataProps;
 
 interface State {
   readonly primaryMuscleGroups: MuscleGroup[];
@@ -57,21 +65,63 @@ const muscleGroupOptions = muscleGroups.map(muscleGroup => ({
   rightValue: 'Secondary',
 }));
 
-export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbackProps, State> {
-  static displayName = 'NewExerciseForm';
+const planesOfMovement = Object
+  .keys(MovementPlane)
+  .map((k: any) => MovementPlane[ k ]);
 
-  state: State = {
-    exerciseType: radioProps[0].value,
-    name: '',
-    planesOfMovement: [],
-    primaryMuscleGroups: [],
-    secondaryMuscleGroups: [],
-    isBodyweight: false,
-    relativeBodyweight: 0,
-  };
+const chunkInTwo = (planes: string[]): string[][] => {
+  const chunks = [];
 
-  _addExercise = () => {
-    const id = createNewId();
+  for (let i = 0; i < planes.length;) {
+    chunks.push(planes.slice(i, i += 2));
+  }
+
+  return chunks;
+};
+
+const planesOfMovementOptions = chunkInTwo(planesOfMovement)
+  .map(chunk => ({
+    leftValue: chunk[0],
+    rightValue: chunk[1],
+  }));
+
+const defaultState: State = {
+  exerciseType: radioProps[0].value,
+  name: '',
+  planesOfMovement: [],
+  primaryMuscleGroups: [],
+  secondaryMuscleGroups: [],
+  isBodyweight: false,
+  relativeBodyweight: 0,
+};
+
+export class ExerciseForm extends React.PureComponent<Props, State> {
+  static displayName = 'ExerciseForm';
+
+  readonly state: State = defaultState;
+
+  componentWillMount() {
+    const exercise = this.props.exercise;
+    if (exercise) {
+      const { id: _, ...ex } = exercise;
+      const isBodyweight = (exercise as IBodyweightExercise).relativeBodyweight !== undefined;
+      const relativeBodyweight = (exercise as IBodyweightExercise).relativeBodyweight || 0;
+
+      this.setState({
+        ...ex,
+        relativeBodyweight,
+        isBodyweight,
+      });
+    } else {
+      this.setState({
+        ...defaultState,
+      });
+    }
+  }
+
+  _submitExercise = () => {
+    const id = this.props.exercise ? this.props.exercise.id : createNewId();
+
     const { isBodyweight, relativeBodyweight, ...exerciseBase } = this.state;
 
     const exercise = isBodyweight ?
@@ -85,7 +135,11 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
         id,
       };
 
-    this.props.addExercise(exercise);
+    if (this.props.exercise) {
+      this.props.updateExercise(exercise);
+    } else {
+      this.props.addExercise(exercise);
+    }
 
     NavigationManager.pop();
   };
@@ -99,6 +153,43 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
     this.setState({
       exerciseType,
     });
+
+  _getPlanesOfMovementPreselectedOptions = (): SpecialSelectSelection[] => {
+    const poms = this.state.planesOfMovement.map(pom => pom.toString());
+
+    return planesOfMovementOptions
+      .map(pom => {
+        if (poms.indexOf(pom.leftValue) !== -1) {
+          return SpecialSelectSelection.Left;
+        } else if (poms.indexOf(pom.rightValue) !== -1) {
+          return SpecialSelectSelection.Right;
+        }
+
+        return SpecialSelectSelection.Default;
+      });
+  };
+
+  _planesOfMovementSubmitted = (selectedOptions: SpecialSelectSelection[]) => {
+    const poms: MovementPlane[] = [];
+
+    planesOfMovementOptions
+      .forEach((pom, index) => {
+        const selected = selectedOptions[ index ];
+
+        if (selected === SpecialSelectSelection.Right) {
+          poms.push(pom.rightValue as any);
+        } else if (selected === SpecialSelectSelection.Left) {
+          poms.push(pom.leftValue as any);
+        }
+      });
+
+    this.setState({
+      planesOfMovement: poms,
+    });
+  };
+
+  _navigateToPlanesOfMovement = () =>
+    this._navigateToSpecialSelect(planesOfMovementOptions, this._planesOfMovementSubmitted, this._getPlanesOfMovementPreselectedOptions);
 
   _muscleGroupsSubmitted = (selectedOptions: SpecialSelectSelection[]) => {
     const primaryMuscleGroups: MuscleGroup[] = [];
@@ -222,8 +313,13 @@ export class NewExerciseForm extends React.PureComponent<INewExerciseFormCallbac
         />
 
         <Button
+          title="Planes of movement"
+          onPress={this._navigateToPlanesOfMovement}
+        />
+
+        <Button
           title="Submit exercise"
-          onPress={this._addExercise}
+          onPress={this._submitExercise}
         />
       </View>
     );

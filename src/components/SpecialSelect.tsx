@@ -49,11 +49,10 @@ interface State {
   selectedItems: SpecialSelectSelection[];
 }
 
-export class SpecialSelect extends React.PureComponent<Props> {
-  render() {
-    const switchOptions: SwitchItems[] = this.props.options.map((option, index) => ({
+export const SpecialSelect: React.SFC<Props> = ({ options, onSubmit, preselectedOptions }) => {
+    const switchOptions: SwitchItems[] = options.map((option, index) => ({
       label: option.label,
-      initial: this.props.preselectedOptions ? this.props.preselectedOptions[index] || SpecialSelectSelection.Default : SpecialSelectSelection.Default,
+      initial: preselectedOptions ? preselectedOptions[index] || SpecialSelectSelection.Default : SpecialSelectSelection.Default,
       options: [
         {
           label: option.leftValue,
@@ -70,9 +69,8 @@ export class SpecialSelect extends React.PureComponent<Props> {
       ],
     }));
 
-    return <SpecialSelectTransformed switchOptions={switchOptions} onSubmit={this.props.onSubmit} preselectedOptions={this.props.preselectedOptions} />;
-  }
-}
+    return <SpecialSelectTransformed switchOptions={switchOptions} onSubmit={onSubmit} preselectedOptions={preselectedOptions} />;
+  };
 
 class SpecialSelectTransformed extends React.PureComponent<TransformedProps, State> {
   readonly state: State = {

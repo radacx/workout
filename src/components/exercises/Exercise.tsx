@@ -1,26 +1,44 @@
 import * as React from 'react';
-import { Text } from 'react-native';
-import { IExercise } from '../../models/interfaces/IExercise';
+import {
+  Button,
+  Text,
+  View,
+} from 'react-native';
 import { styles } from '../../constants/styles';
+import { NavigationManager } from './ExercisesList';
+import { createNavigationProps } from '../../utils/createNavigationProps';
+import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
+import { Guid } from '../../models/Guid';
 
 export interface IExerciseDataProps {
-  readonly exercise: IExercise;
+  readonly name: string;
+  readonly id: Guid;
 }
 
-export interface IExerciseCallbackProps {
-  readonly removeExercise: () => void;
+type ExerciseProps = IExerciseDataProps;
+
+export class Exercise extends React.PureComponent<ExerciseProps> {
+  static displayName = 'Exercise';
+
+  _navigateToExerciseForm = () => {
+    NavigationManager.push(createNavigationProps(componentsWithNavigationProps.ExerciseForm)({
+      passProps: {
+        id: this.props.id,
+      },
+    }));
+  };
+
+  render() {
+    return (
+      <View>
+        <Text style={styles.exercise}>
+          {this.props.name}
+        </Text>
+        <Button
+          title="View details"
+          onPress={this._navigateToExerciseForm}
+        />
+      </View>
+    );
+  }
 }
-
-interface IExerciseProps extends IExerciseDataProps, IExerciseCallbackProps {}
-
-const Exercise: React.SFC<IExerciseProps> = ({ exercise, removeExercise }) =>
-  <Text
-    style={styles.exercise}
-    onPress={removeExercise}
-  >
-    {exercise.name}
-  </Text>;
-
-Exercise.displayName = 'Exercise';
-
-export { Exercise };
