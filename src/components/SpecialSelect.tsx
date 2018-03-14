@@ -8,12 +8,12 @@ import {
 } from 'react-native';
 import { assign } from '../utils/assign';
 
-const SwitchSelector = require('react-native-switch-selector').default;
+const { SegmentedControls } = require('react-native-radio-buttons');
 
 export enum SpecialSelectSelection {
-  Left = '0',
-  Default = '1',
-  Right = '2',
+  Left = 0,
+  Default = 1,
+  Right = 2,
 }
 
 export interface SpecialSelectOption {
@@ -52,7 +52,7 @@ interface State {
 export const SpecialSelect: React.SFC<Props> = ({ options, onSubmit, preselectedOptions }) => {
     const switchOptions: SwitchItems[] = options.map((option, index) => ({
       label: option.label,
-      initial: preselectedOptions ? preselectedOptions[index] || SpecialSelectSelection.Default : SpecialSelectSelection.Default,
+      initial: preselectedOptions ? (preselectedOptions[index] != null ? preselectedOptions[index] : SpecialSelectSelection.Default) : SpecialSelectSelection.Default,
       options: [
         {
           label: option.leftValue,
@@ -65,7 +65,7 @@ export const SpecialSelect: React.SFC<Props> = ({ options, onSubmit, preselected
         {
           label: option.rightValue,
           value: SpecialSelectSelection.Right,
-        }
+        },
       ],
     }));
 
@@ -83,24 +83,61 @@ class SpecialSelectTransformed extends React.PureComponent<TransformedProps, Sta
 
   _selectOptions = (position: number, index: SpecialSelectSelection) =>
     this.setState(({ selectedItems }) => ({
-      selectedItems: assign(selectedItems, si => {
-        si[position] = index;
-        return si;
-      }),
+      selectedItems: assign(
+        selectedItems,
+        si => {
+          si[ position ] = index;
+          return si;
+        }
+      ),
     }));
 
-  _renderSwitch = ({ item: switchItems, index: position }: ListRenderItemInfo<SwitchItems>) =>
-    <View>
-      {switchItems.label && <Text>
-        {switchItems.label}
-      </Text>}
-      <SwitchSelector
-        options={switchItems.options}
-        initial={switchItems.initial}
-        onPress={(index: SpecialSelectSelection) => this._selectOptions(position, index)}
-        hasPadding={true}
-      />
-    </View>;
+  _testOptionEqual = (a: SwitchItems, b: SwitchItems) => {
+    if (!a || !b) {
+      return false;
+    }
+    return a.label === b.label;
+  };
+
+  _extractText = (option: SwitchItems) =>
+    option.label;
+
+  _renderSwitch = ({ item: switchItems, index: position }: ListRenderItemInfo<SwitchItems>) => {
+    const optionStyle = {
+      fontSize: 30,
+      fontWeight: 'bold',
+      fontFamily: 'Snell Roundhand',
+    };
+
+    const containerStyle = {
+      marginLeft: 10,
+      marginRight: 10,
+    };
+
+    return (
+      <View>
+        {switchItems.label && <Text>
+          {switchItems.label}
+        </Text>}
+        <SegmentedControls
+          tint="#f80046"
+          selectedTint="white"
+          backTint="#1e2126"
+          optionStyle={optionStyle}
+          containerStyle={containerStyle}
+          options={switchItems.options}
+          onSelection={(_: any, index: SpecialSelectSelection) => this._selectOptions(
+            position,
+            index
+          )}
+          selectedIndex={switchItems.initial}
+          extractText={this._extractText}
+          testOptionEqual={this._testOptionEqual}
+        >
+        </SegmentedControls>
+      </View>
+    );
+  };
 
   _submit = () =>
     this.props.onSubmit(this.state.selectedItems);
