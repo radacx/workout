@@ -4,21 +4,16 @@ import {
   assign,
 } from '../../utils/assign';
 import {
-  AddExerciseAction,
-  RemoveExerciseAction,
-  UpdateExerciseAction,
-} from '../../models/actions/actions';
-import {
   EXERCISE_ADDED,
   EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
+import {addExercise, removeExercise, updateExercise} from '../../actions';
+import {Action} from '../../models/Action';
 
 type State = IHomogenousObject<IExercise>;
 
-type Actions = AddExerciseAction | UpdateExerciseAction | RemoveExerciseAction;
-
-const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction): State =>
+const add = (state: State, { payload: { exercise } }: ReturnType<typeof addExercise>): State =>
   assign(
     state,
     st => {
@@ -27,7 +22,7 @@ const addExercise = (state: State, { payload: { exercise } }: AddExerciseAction)
     }
   );
 
-const updateExercise = (state: State, { payload: { exercise } }: UpdateExerciseAction): State =>
+const update = (state: State, { payload: { exercise } }:  ReturnType<typeof updateExercise>): State =>
   assign(
     state,
     st => ({
@@ -36,7 +31,7 @@ const updateExercise = (state: State, { payload: { exercise } }: UpdateExerciseA
       }),
   );
 
-const removeExercise = (state: State, { payload }: RemoveExerciseAction): State =>
+const remove = (state: State, { payload }:  ReturnType<typeof removeExercise>): State =>
   assign(
     state,
     st => {
@@ -47,14 +42,14 @@ const removeExercise = (state: State, { payload }: RemoveExerciseAction): State 
 
 const initialState: State = {};
 
-export const exercises = (state: State = initialState, action: Actions): State => {
+export const exercises = (state: State = initialState, action: Action): State => {
   switch (action.type) {
     case EXERCISE_ADDED:
-      return addExercise(state, action);
+      return add(state, action);
     case EXERCISE_UPDATED:
-      return updateExercise(state, action);
+      return update(state, action);
     case EXERCISE_REMOVED:
-      return removeExercise(state, action);
+      return remove(state, action);
 
     default:
       return state;
