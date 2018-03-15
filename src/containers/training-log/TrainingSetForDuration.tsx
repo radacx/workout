@@ -9,7 +9,7 @@ import {
 import { IAppState } from '../../models/state/IAppState';
 import { TrainingSet } from '../../models/TrainingSet';
 import { ComponentClass } from 'react';
-import { addTrainingSetAsync } from '../../actions/thunk/index';
+import { addTrainingSetAsync } from '../../actions/thunk';
 
 const mapDispatchToProps = (dispatch: Dispatch<IAppState>): TrainingSetForDurationCallbackProps => ({
   onAddSet: (trainingSet: TrainingSet) =>

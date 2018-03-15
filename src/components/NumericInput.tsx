@@ -12,21 +12,21 @@ interface INumericInputProps extends TextInputProperties {
 }
 
 interface INumericInputState {
-  readonly number: string;
+  readonly number?: string;
 }
 
-const getTextNumber = (num: number | undefined, minValue: number) =>
-  num ? num.toString() : minValue.toString();
+const getText = (minNumber: number, initialNumber?: number) =>
+  initialNumber === undefined ? undefined : Math.max(initialNumber, minNumber).toString();
 
 export class NumericInput extends React.PureComponent<INumericInputProps, INumericInputState> {
   readonly state: INumericInputState = {
-    number: getTextNumber(this.props.initialNumber, this.props.minValue || 0),
+    number: getText(this.props.minValue || 0, this.props.initialNumber),
   };
 
   _numberChanged = (numberText: string) => {
     let num = +numberText;
     const min = this.props.minValue || 0;
-    const max = this.props.maxValue || 0;
+    const max = this.props.maxValue || Number.MAX_SAFE_INTEGER;
 
     if (num < min) {
       num = min;
@@ -43,7 +43,7 @@ export class NumericInput extends React.PureComponent<INumericInputProps, INumer
 
   componentWillReceiveProps(props: INumericInputProps) {
     this.setState({
-      number: getTextNumber(props.initialNumber, this.props.minValue || 0),
+      number: getText(this.props.minValue || 0, props.initialNumber),
     });
   }
 

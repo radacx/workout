@@ -13,13 +13,19 @@ export interface TrainingSetForDurationCallbackProps {
   readonly onAddSet: (trainingSet: TrainingSet) => void;
 }
 
-interface ITrainingSetForDurationState {
+interface State {
   readonly duration: number;
   readonly rest: number;
   readonly weight?: number;
 }
 
-export class TrainingSetForDuration extends React.PureComponent<TrainingSetForDurationCallbackProps, ITrainingSetForDurationState> {
+export class TrainingSetForDuration extends React.PureComponent<TrainingSetForDurationCallbackProps, State> {
+  readonly state: State = {
+    duration: 0,
+    rest: 0,
+    weight: 0,
+  };
+
   _durationChanged = (duration: number) =>
     this.setState({
       duration,
@@ -54,17 +60,26 @@ export class TrainingSetForDuration extends React.PureComponent<TrainingSetForDu
         <Text>
           Duration
         </Text>
-        <NumericInput onChangeNumber={this._durationChanged} />
+        <NumericInput
+          initialNumber={this.state.duration}
+          onChangeNumber={this._durationChanged}
+        />
 
         <Text>
           Rest
         </Text>
-        <NumericInput onChangeNumber={this._restChanged} />
+        <NumericInput
+          initialNumber={this.state.rest}
+          onChangeNumber={this._restChanged}
+        />
 
         <Text>
           Weight
         </Text>
-        <NumericInput onChangeNumber={this._weightChanged} />
+        <NumericInput
+          initialNumber={this.state.weight}
+          onChangeNumber={this._weightChanged}
+        />
 
         <Button
           title="Submit"

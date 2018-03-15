@@ -1,6 +1,6 @@
 import {
   addSessionExercise,
-  addTraningSet,
+  addTrainingSet,
 } from '../actionCreators';
 import { IThunkAction } from '../../models/interfaces/IThunkAction';
 import { IAppState } from '../../models/state/IAppState';
@@ -12,7 +12,7 @@ export const addTrainingSetAsync: IThunkAction<TrainingSet> = (trainingSet: Trai
   (dispatch: Dispatch<{}>, getState: () => IAppState) => {
     const formIds = getState().formIds;
 
-    return dispatch(addTraningSet(trainingSet, formIds));
+    return dispatch(addTrainingSet(trainingSet, formIds));
   };
 
 export const addSessionExerciseAsync: IThunkAction<ISessionExercise> = (sessionExercise: ISessionExercise) =>

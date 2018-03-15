@@ -61,7 +61,7 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
           Bodyweight:
         </Text>
         <NumericInput
-          initialNumber={this.props.bodyweight}
+          initialNumber={this.state.bodyweight}
           onChangeNumber={this._onChangedBodyweight}
         />
 
