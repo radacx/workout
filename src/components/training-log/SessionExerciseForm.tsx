@@ -4,7 +4,7 @@ import {
   View,
 } from 'react-native';
 import { ComboBox } from '../ComboBox';
-import { IExercise } from '../../models/interfaces/IExercise';
+import { IExercise } from '../../models/Exercise';
 import { NavigationManager } from './TrainingLog';
 import { ISessionExercise } from '../../models/interfaces/ITrainingSession';
 

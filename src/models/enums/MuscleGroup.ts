@@ -13,4 +13,7 @@ export enum MuscleGroup {
   LowerBack = 'LowerBack',
   SerratusAnterior = 'Serratus Anterior',
   Rhomboids = 'Rhomboids',
+  Quadriceps = 'Quadriceps',
+  Hamstrings = 'Hamstrings',
+  Calves = 'Calves',
 }

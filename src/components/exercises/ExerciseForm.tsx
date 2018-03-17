@@ -21,7 +21,6 @@ import {
   SpecialSelectOption,
   SpecialSelectSelection,
 } from '../SpecialSelect';
-import { IBodyweightExercise } from '../../models/interfaces/ITrainingSession';
 
 export interface ExerciseFormCallbackProps {
   addExercise: (exercise: Exercise) => void;
@@ -41,7 +40,7 @@ interface State {
   readonly exerciseType: ExerciseType;
   readonly name: string;
   readonly isBodyweight: boolean;
-  readonly relativeBodyweight: number;
+  readonly relativeBodyweight?: number;
 }
 
 const radioProps = [
@@ -104,8 +103,8 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
     const exercise = this.props.exercise;
     if (exercise) {
       const { id: _, ...ex } = exercise;
-      const isBodyweight = (exercise as IBodyweightExercise).relativeBodyweight !== undefined;
-      const relativeBodyweight = (exercise as IBodyweightExercise).relativeBodyweight || 0;
+      const isBodyweight = exercise.relativeBodyweight !== undefined;
+      const relativeBodyweight = exercise.relativeBodyweight;
 
       this.setState({
         ...ex,

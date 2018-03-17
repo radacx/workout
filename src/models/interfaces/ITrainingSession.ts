@@ -1,7 +1,7 @@
 import { Guid } from '../Guid';
-import { IExercise } from './IExercise';
 import { IHomogenousObject } from './IHomogenousObject';
 import { TrainingSet } from '../TrainingSet';
+import { Exercise } from '../Exercise';
 
 export interface ITempo {
   readonly eccentric: number;
@@ -27,7 +27,7 @@ export interface ITrainingSet {
 
 export interface ISessionExercise {
   readonly id: Guid;
-  readonly exercise: IExercise['id'];
+  readonly exercise: Exercise['id'];
   readonly sets: IHomogenousObject<TrainingSet>;
 }
 
@@ -36,8 +36,4 @@ export interface ITrainingSession {
   readonly date: number;
   readonly bodyweight: number;
   readonly exercises: IHomogenousObject<ISessionExercise>;
-}
-
-export interface IBodyweightExercise extends IExercise {
-  readonly relativeBodyweight: number;
 }

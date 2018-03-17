@@ -1,4 +1,14 @@
-import { IExercise } from './interfaces/IExercise';
-import { IBodyweightExercise } from './interfaces/ITrainingSession';
+import { MuscleGroup } from './enums/MuscleGroup';
+import { MovementPlane } from './enums/MovementPlane';
+import { Guid } from './Guid';
+import { ExerciseType } from './enums/ExerciseType';
 
-export type Exercise = IExercise | IBodyweightExercise;
+export interface Exercise {
+  id: Guid;
+  name: string;
+  exerciseType: ExerciseType;
+  primaryMuscleGroups: MuscleGroup[];
+  secondaryMuscleGroups: MuscleGroup[];
+  planesOfMovement: MovementPlane[];
+  relativeBodyweight?: number;
+}

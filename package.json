@@ -10,7 +10,8 @@
     "tsc": "tsc",
     "clean": "rimraf dist",
     "watch": "npm run tsc -- -w",
-    "build": "npm run clean && npm run tsc --"
+    "build": "npm run clean && npm run tsc --",
+    "release": "cd android && gradlew assembleRelease"
   },
   "dependencies": {
     "immutable-assign": "^2.0.4",

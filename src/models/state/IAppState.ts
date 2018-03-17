@@ -1,10 +1,10 @@
 import { ITrainingSession } from '../interfaces/ITrainingSession';
 import { IHomogenousObject } from '../interfaces/IHomogenousObject';
-import { IExercise } from '../interfaces/IExercise';
+import { Exercise } from '../Exercise';
 import { IFormIds } from '../interfaces/IFormIds';
 
 export interface IAppState {
-  readonly exercises: IHomogenousObject<IExercise>;
+  readonly exercises: IHomogenousObject<Exercise>;
   readonly sessions: IHomogenousObject<ITrainingSession>;
   readonly formIds: IFormIds;
 }
