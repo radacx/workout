@@ -11,8 +11,17 @@ import {
   EXERCISE_ADDED,
   EXERCISE_REMOVED,
   EXERCISE_UPDATED,
-  SESSION_ADDED, SESSION_EXERCISE_ADDED,
-  SESSION_UPDATED, SET_EXERCISE_ID, SET_SESSION_ID, TRAINING_SET_ADDED
+  SESSION_ADDED,
+  SESSION_DELETED,
+  SESSION_EXERCISE_ADDED,
+  SESSION_EXERCISE_REMOVED,
+  SESSION_EXERCISE_UPDATED,
+  SESSION_UPDATED,
+  SET_EXERCISE_ID,
+  SET_SESSION_ID,
+  TRAINING_SET_ADDED,
+  TRAINING_SET_REMOVED,
+  TRAINING_SET_UPDATED,
 } from '../constants/actionTypes';
 import {createAction} from '../utils/createAction';
 
@@ -51,6 +60,13 @@ export const updateTrainingSession = createAction((session: IUpdatedSession) => 
   },
 }));
 
+export const removeTrainingSession = createAction((id: Guid) => ({
+  type: SESSION_DELETED,
+  payload: {
+    id,
+  },
+}));
+
 export const addSessionExercise = createAction((sessionExercise: ISessionExercise, formIds: IFormIds) => ({
   type: SESSION_EXERCISE_ADDED,
   payload: {
@@ -59,10 +75,42 @@ export const addSessionExercise = createAction((sessionExercise: ISessionExercis
   }
 }));
 
+export const updateSessionExercise = createAction((sessionExercise: ISessionExercise, formIds: IFormIds) => ({
+  type: SESSION_EXERCISE_UPDATED,
+  payload: {
+    sessionExercise,
+    formIds,
+  },
+}));
+
+export const removeSessionExercise = createAction((id: Guid, formIds: IFormIds) => ({
+  type: SESSION_EXERCISE_REMOVED,
+  payload: {
+    id,
+    formIds,
+  },
+}));
+
 export const addTrainingSet = createAction((trainingSet: TrainingSet, formIds: IFormIds) => ({
   type: TRAINING_SET_ADDED,
   payload: {
     trainingSet,
+    formIds,
+  },
+}));
+
+export const updateTrainingSet = createAction((trainingSet: TrainingSet, formIds: IFormIds) => ({
+  type: TRAINING_SET_UPDATED,
+  payload: {
+    trainingSet,
+    formIds,
+  },
+}));
+
+export const removeTrainingSet = createAction((id: Guid, formIds: IFormIds) => ({
+  type: TRAINING_SET_REMOVED,
+  payload: {
+    id,
     formIds,
   },
 }));
