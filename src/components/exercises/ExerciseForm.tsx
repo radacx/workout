@@ -111,10 +111,6 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
         relativeBodyweight,
         isBodyweight,
       });
-    } else {
-      this.setState({
-        ...defaultState,
-      });
     }
   }
 
