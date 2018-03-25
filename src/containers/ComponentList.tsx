@@ -1,24 +1,28 @@
-import { IAppState } from '../models/state/IAppState';
+import { AppState } from '../models/state/AppState';
 import {
   ComponentList as ComponentListComponent,
-  IComponentListDataProps,
-  IComponentListOwnProps,
+  ComponentListDataProps,
+  ComponentListOwnProps,
 } from '../components/ComponentList';
 import {
   ComponentClass,
   connect,
 } from 'react-redux';
-import { IHomogenousObject } from '../models/interfaces/IHomogenousObject';
-import { IHasId } from '../models/interfaces/IHasId';
+import { HomogenousObject } from '../models/HomogenousObject';
+import { HasId } from '../models/HasId';
 
-interface IComponentListContainerProps extends IComponentListOwnProps {
-  getIdsFromState: (state: IAppState) => IHomogenousObject<IHasId>;
-}
+type Props = Readonly<ComponentListOwnProps
+  & {
+  getIdsFromState: (state: AppState) => HomogenousObject<HasId>;
+}>;
 
-const mapStateToProps = (state: IAppState, { getIdsFromState }: IComponentListContainerProps): IComponentListDataProps => ({
+const mapStateToProps = (
+  state: AppState,
+  { getIdsFromState }: Props,
+): ComponentListDataProps => ({
   ids: Object.keys(getIdsFromState(state)),
 });
 
-export const ComponentList: ComponentClass<IComponentListContainerProps> = connect(
+export const ComponentList: ComponentClass<Props> = connect(
   mapStateToProps,
 )(ComponentListComponent);

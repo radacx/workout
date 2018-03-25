@@ -1,31 +1,45 @@
 import * as React from 'react';
-import { FlatList } from 'react-native';
+import {
+  FlatList,
+  ListRenderItemInfo,
+} from 'react-native';
 import { Guid } from '../models/Guid';
-import { IHasId } from '../models/interfaces/IHasId';
+import { HasId } from '../models/HasId';
 
-export interface IComponentListDataProps {
-  readonly ids: Guid[];
+export interface ComponentListDataProps {
+  ids: Guid[];
 }
 
-export interface IComponentListOwnProps {
-  readonly keyExtractor?: (item: Guid) => string;
-  readonly component: React.ComponentType<IHasId>;
+export interface ComponentListOwnProps {
+  keyExtractor?: (item: Guid) => string;
+  component: React.ComponentType<HasId>;
 }
 
-type ComponentListProps = IComponentListDataProps & IComponentListOwnProps;
+type ComponentListProps = Readonly<ComponentListDataProps
+  & ComponentListOwnProps>;
 
-const defaultProps = {
-  keyExtractor: (id: Guid) => id,
-};
+export class ComponentList extends React.PureComponent<ComponentListProps> {
+  static displayName = 'ComponentList';
 
-const ComponentList: React.SFC<ComponentListProps> = ({ ids, keyExtractor, component: Component }) =>
-  <FlatList
-    data={ids}
-    renderItem={({ item: id }) => <Component id={id} />}
-    keyExtractor={keyExtractor}
-  />;
+  static defaultProps = {
+    keyExtractor: (id: Guid) => id,
+  };
 
-ComponentList.displayName = 'ComponentList';
-ComponentList.defaultProps = defaultProps;
+  _renderItem = ({ item: id }: ListRenderItemInfo<Guid>) =>
+    <this.props.component id={id}/>;
 
-export { ComponentList };
+  render() {
+    const {
+      ids,
+      keyExtractor,
+    } = this.props;
+
+    return (
+      <FlatList
+        data={ids}
+        renderItem={this._renderItem}
+        keyExtractor={keyExtractor}
+      />
+    );
+  }
+}

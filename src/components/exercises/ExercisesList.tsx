@@ -8,15 +8,17 @@ import { ComponentList } from '../../containers/ComponentList';
 import { Exercise } from '../../containers/exercises/Exercise';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
 import { Navigator } from 'react-native-navigation';
-import { IScreen } from '../../models/interfaces/IScreen';
+import { Screen } from '../../models/navigation/Screen';
+import { exercisesSelector } from '../../selectors/exercisesSelector';
 
 export let NavigationManager: Navigator;
 
-export class ExercisesList extends React.PureComponent<IScreen> {
+export class ExercisesList extends React.PureComponent<Screen> {
   static displayName = 'ExercisesList';
 
   _navigateToNewExerciseForm = () => {
-    NavigationManager.push(componentsWithNavigationProps.ExerciseForm.navigationProps);
+    NavigationManager.push(
+      componentsWithNavigationProps.ExerciseForm.navigationProps);
   };
 
   componentDidMount() {
@@ -30,8 +32,9 @@ export class ExercisesList extends React.PureComponent<IScreen> {
           onPress={this._navigateToNewExerciseForm}
           title={'Add new exercise'}
         />
+
         <ComponentList
-          getIdsFromState={state => state.exercises}
+          getIdsFromState={exercisesSelector}
           component={Exercise}
         />
       </View>

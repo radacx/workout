@@ -5,11 +5,14 @@ import {
   SessionExercisesListOwnProps,
 } from '../../components/training-log/SessionExercisesList';
 import { ComponentClass } from 'react';
-import { IAppState } from '../../models/state/IAppState';
+import { AppState } from '../../models/state/AppState';
 
-const mapStateToProps = (state: IAppState, { sessionId }: SessionExercisesListOwnProps): SessionExercisesListDataProps => ({
-    exercises: state.sessions[ sessionId ].exercises,
-  });
+const mapStateToProps = (
+  state: AppState,
+  { sessionId }: SessionExercisesListOwnProps,
+): SessionExercisesListDataProps => ({
+  exercises: state.sessions[ sessionId ].exercises,
+});
 
 export const SessionExercisesList: ComponentClass<SessionExercisesListOwnProps> = connect(
   mapStateToProps,

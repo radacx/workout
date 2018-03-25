@@ -2,10 +2,7 @@ import {
   connect,
   Dispatch,
 } from 'react-redux';
-import { IAppState } from '../../models/state/IAppState';
-import {
-  updateTrainingSession,
-} from '../../actions/index';
+import { AppState } from '../../models/state/AppState';
 import {
   TrainingSessionForm as TrainingSessionComponent,
   TrainingSessionFormCallbackProps,
@@ -13,10 +10,14 @@ import {
   TrainingSessionFormOwnProps,
 } from '../../components/training-log/TrainingSessionForm';
 import { ComponentClass } from 'react';
-import { IUpdatedSession } from '../../models/interfaces/IUpdatedSession';
+import { UpdatedSession } from '../../models/data/UpdatedSession';
+import { updateTrainingSession } from '../../actions/actionCreators';
 
-const mapStateToProps = (state: IAppState, { sessionId }: TrainingSessionFormOwnProps): TrainingSessionFormDataProps => {
-  const { bodyweight, date } = state.sessions[sessionId];
+const mapStateToProps = (
+  state: AppState,
+  { sessionId }: TrainingSessionFormOwnProps,
+): TrainingSessionFormDataProps => {
+  const { bodyweight, date } = state.sessions[ sessionId ];
 
   return {
     bodyweight,
@@ -24,8 +25,8 @@ const mapStateToProps = (state: IAppState, { sessionId }: TrainingSessionFormOwn
   };
 };
 
-const mapDispatchToProps = (dispatch: Dispatch<IAppState>): TrainingSessionFormCallbackProps => ({
-  updateTrainingSession: (session: IUpdatedSession) =>
+const mapDispatchToProps = (dispatch: Dispatch<AppState>): TrainingSessionFormCallbackProps => ({
+  updateTrainingSession: (session: UpdatedSession) =>
     dispatch(updateTrainingSession(session)),
 });
 

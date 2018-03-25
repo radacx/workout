@@ -3,47 +3,42 @@ import {
   Text,
   View,
 } from 'react-native';
-import {
-  ITrainingSetForDuration,
-  ITrainingSetForReps,
-} from '../../models/interfaces/ITrainingSession';
-import { TrainingSet } from '../../models/TrainingSet';
+import { TrainingSet } from '../../models/data/TrainingSet';
+import { ExerciseType } from '../../models/enums/ExerciseType';
+import { dateUtils } from '../../utils/dateUtils';
 
-export interface ITrainingSetsDataProps {
-  readonly sets: TrainingSet[];
+export interface TrainingSetsDataProps {
+  sets: TrainingSet[];
+  exerciseType: ExerciseType;
 }
 
-const secondsToTimeString = (seconds: number) => {
-  if (seconds < 60) {
-    return `${seconds} sec`;
-  }
+type Props = Readonly<TrainingSetsDataProps>;
 
-  const minutes = Math.floor(seconds / 60) % 60;
-  const leftoverSeconds = seconds % 60;
+export class TrainingSets extends React.PureComponent<Props> {
+  static displayName = 'TrainingSets';
 
-  return `${minutes}:${('0' + leftoverSeconds).slice(-2)}`;
-};
+  _trainingSetToString = (set: TrainingSet) =>
+    this.props.exerciseType === ExerciseType.Reps
+      ? `${set.repsDuration} reps`
+      : dateUtils.secondsToTimeString(set.repsDuration);
 
-const trainingSetToString = (set: TrainingSet) =>
-  (set as ITrainingSetForReps).reps ?
-    `${(set as ITrainingSetForReps).reps} reps` :
-    secondsToTimeString((set as ITrainingSetForDuration).duration);
+  _setToString = (tSet: TrainingSet) => {
+    const trainingSetString = this._trainingSetToString(tSet);
 
-const setToString = (tSet: TrainingSet) => {
-  const weightString = tSet.weight ? `${tSet.weight} kg x ` : '';
+    return tSet.weight
+      ? `${tSet.weight} kg x ${trainingSetString}`
+      : trainingSetString;
+  };
 
-  return `${weightString}${trainingSetToString(tSet)}`;
-};
-
-export class TrainingSets extends React.PureComponent<ITrainingSetsDataProps> {
   render() {
+    const trainingSets = this.props.sets.map((tSet, index) =>
+      <Text key={tSet.id}>
+        Set {index + 1}: {this._setToString(tSet)}
+      </Text>);
+
     return (
       <View>
-        {this.props.sets.map((tSet, index) =>
-          <Text key={tSet.id}>
-            Set {index + 1}: {setToString(tSet)}
-          </Text>,
-        )}
+        {trainingSets}
       </View>
     );
   }

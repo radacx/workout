@@ -15,7 +15,10 @@ export const createNewId = (): Guid => {
     if (i === 12) {
       id += 4;
     } else {
-      id += (i === 16 ? (random & 3 | 8) : random).toString(16);
+      id +=
+        (i === 16
+          ? (random & 3 | 8)
+          : random).toString(16);
     }
   }
   return id;

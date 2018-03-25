@@ -1,4 +1,4 @@
-export interface INavigationProps {
+export interface NavigationProps {
   screen: string;
   title: string;
 }

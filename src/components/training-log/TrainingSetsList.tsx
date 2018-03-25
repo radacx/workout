@@ -5,39 +5,42 @@ import {
 } from 'react-native';
 import { ExerciseType } from '../../models/enums/ExerciseType';
 import { NavigationManager } from './TrainingLog';
-import { createNavigationProps } from '../../utils/createNavigationProps';
-import {
-  ComponentWithNavigationProps,
-} from '../../models/ComponentWithNavigationProps';
+import { getNavigationHelperForComponent } from '../../utils/getNavigationHelperForComponent';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
 import { Guid } from '../../models/Guid';
 import { TrainingSets } from '../../containers/training-log/TrainingSets';
 
 export interface ITrainingSetsListOwnProps {
-  readonly exerciseType: ExerciseType;
-  readonly exerciseId: Guid;
+  exerciseType: ExerciseType;
+  exerciseId: Guid;
 }
 
 export interface TrainingSetsListCallbackProps {
-  readonly setExerciseId: (id: Guid) => void;
+  setExerciseId: (id: Guid) => void;
 }
 
-type Props = ITrainingSetsListOwnProps & TrainingSetsListCallbackProps;
+type Props = Readonly<ITrainingSetsListOwnProps
+  & TrainingSetsListCallbackProps>;
 
 export class TrainingSetsList extends React.PureComponent<Props> {
-  _openNewSetForm = () => {
-    const con: ComponentWithNavigationProps<any> = this.props.exerciseType === ExerciseType.Duration ?
-      componentsWithNavigationProps.TrainingSetForDuration :
-      componentsWithNavigationProps.TrainingSetForReps;
+  static displayName = 'TrainingSetsList';
 
+  _openNewSetForm = () => {
     this.props.setExerciseId(this.props.exerciseId);
 
-    NavigationManager.showModal(createNavigationProps(con)({
-      passProps: {},
+    const helper = getNavigationHelperForComponent(
+      componentsWithNavigationProps.TrainingSet);
+
+    const params = helper.createNavParams({
+      passProps: {
+        exerciseType: this.props.exerciseType,
+      },
       navigatorStyle: {
         screenBackgroundColor: 'white',
       },
-    }));
+    });
+
+    NavigationManager.showModal(params);
   };
 
   render() {
@@ -47,7 +50,8 @@ export class TrainingSetsList extends React.PureComponent<Props> {
           title="Add set"
           onPress={this._openNewSetForm}
         />
-        <TrainingSets exerciseId={this.props.exerciseId} />
+
+        <TrainingSets exerciseId={this.props.exerciseId}/>
       </View>
     );
   }

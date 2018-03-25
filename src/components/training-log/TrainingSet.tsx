@@ -5,29 +5,40 @@ import {
   View,
 } from 'react-native';
 import { NumericInput } from '../NumericInput';
-import { ITrainingSetForReps } from '../../models/interfaces/ITrainingSession';
+import { TrainingSet as TrainingSetModel } from '../../models/data/TrainingSet';
 import { NavigationManager } from './TrainingLog';
+import { createNewId } from '../../utils/createNewId';
+import { ExerciseType } from '../../models/enums/ExerciseType';
 
-export interface ITrainingSetForDurationCallbackProps {
-  readonly onAddSet: (set: ITrainingSetForReps) => void;
+export interface TrainingSetCallbackProps {
+  onAddSet: (trainingSet: TrainingSetModel) => void;
 }
 
-interface State {
-  readonly reps: number;
-  readonly rest: number;
-  readonly weight?: number;
+export interface TrainingSetOwnProps {
+  exerciseType: ExerciseType;
 }
 
-export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurationCallbackProps, State> {
+type Props = Readonly<TrainingSetCallbackProps
+  & TrainingSetOwnProps>;
+
+type State = Readonly<{
+  repsDuration: number;
+  rest: number;
+  weight?: number;
+}>;
+
+export class TrainingSet extends React.PureComponent<Props, State> {
+  static displayName = 'TrainingSet';
+
   readonly state: State = {
-    reps: 0,
+    repsDuration: 0,
     rest: 0,
     weight: 0,
   };
 
-  _repsChanged = (reps: number) =>
+  _repsDurationChanged = (repsDuration: number) =>
     this.setState({
-      reps,
+      repsDuration,
     });
 
   _restChanged = (rest: number) =>
@@ -41,11 +52,9 @@ export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurat
     });
 
   _onSubmit = () => {
-    const set: ITrainingSetForReps = {
-      rest: this.state.rest,
-      weight: this.state.weight,
-      reps: this.state.reps,
-      id: new Date().getTime().toString(),
+    const set: TrainingSetModel = {
+      ...this.state,
+      id: createNewId(),
     };
 
     this.props.onAddSet(set);
@@ -54,14 +63,16 @@ export class TrainingSetForReps extends React.PureComponent<ITrainingSetForDurat
   };
 
   render() {
-    return(
+    return (
       <View>
         <Text>
-          Reps
+          {this.props.exerciseType === ExerciseType.Reps
+            ? 'Reps'
+            : 'Duration'}
         </Text>
         <NumericInput
-          initialNumber={this.state.reps}
-          onChangeNumber={this._repsChanged}
+          initialNumber={this.state.repsDuration}
+          onChangeNumber={this._repsDurationChanged}
         />
 
         <Text>

@@ -1,6 +1,6 @@
 import { Guid } from '../Guid';
 
-export interface IUpdatedSession {
+export interface UpdatedSession {
   date: number;
   bodyweight: number;
   id: Guid;

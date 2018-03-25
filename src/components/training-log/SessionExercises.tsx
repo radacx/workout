@@ -4,17 +4,34 @@ import {
   ListRenderItemInfo,
 } from 'react-native';
 import { SessionExercise } from '../../containers/training-log/SessionExercise';
-import { ISessionExercise } from '../../models/interfaces/ITrainingSession';
-import { IHomogenousObject } from '../../models/interfaces/IHomogenousObject';
+import { SessionExercise as SessionExerciseModel } from '../../models/data/SessionExercise';
+import { HomogenousObject } from '../../models/HomogenousObject';
 import { homogenousObjectToArray } from '../../utils/homogenousObjectToArray';
 
-interface ISessionExercisesProps {
-  readonly exercises: IHomogenousObject<ISessionExercise>;
+interface SessionExercisesProps {
+  exercises: HomogenousObject<SessionExerciseModel>;
 }
 
-export const SessionExercises: React.SFC<ISessionExercisesProps> = ({ exercises }) =>
-  <FlatList
-    data={homogenousObjectToArray(exercises)}
-    renderItem={({ item }: ListRenderItemInfo<ISessionExercise>) => <SessionExercise exerciseId={item.exercise} sessionExerciseId={item.id}  />}
-    keyExtractor={item => item.id}
-  />;
+type Props = Readonly<SessionExercisesProps>;
+
+export class SessionExercises extends React.PureComponent<Props> {
+  static displayName = 'SessionExercises';
+
+  _renderExercise = ({ item }: ListRenderItemInfo<SessionExerciseModel>) =>
+    <SessionExercise
+      exerciseId={item.exercise}
+      sessionExerciseId={item.id}
+    />;
+
+  _extractKey = (item: SessionExerciseModel) => item.id;
+
+  render() {
+    return (
+      <FlatList
+        data={homogenousObjectToArray(this.props.exercises)}
+        renderItem={this._renderExercise}
+        keyExtractor={this._extractKey}
+      />
+    );
+  }
+}

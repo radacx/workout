@@ -1,5 +1,5 @@
-import { IHomogenousObject } from '../../models/interfaces/IHomogenousObject';
-import { Exercise } from '../../models/Exercise';
+import { HomogenousObject } from '../../models/HomogenousObject';
+import { Exercise } from '../../models/data/Exercise';
 import {
   assign,
 } from '../../utils/assign';
@@ -8,35 +8,49 @@ import {
   EXERCISE_REMOVED,
   EXERCISE_UPDATED,
 } from '../../constants/actionTypes';
-import {addExercise, removeExercise, updateExercise} from '../../actions';
-import {Action} from '../../models/Action';
+import {
+  addExercise,
+  removeExercise,
+  updateExercise,
+} from '../../actions/actionCreators';
+import { Action } from '../../models/state/Action';
 
-type State = IHomogenousObject<Exercise>;
+type State = Readonly<HomogenousObject<Exercise>>;
 
-const add = (state: State, { payload: { exercise } }: ReturnType<typeof addExercise>): State =>
-  assign(
-    state,
-    st => {
-      st[exercise.id] = exercise;
-      return st;
-    }
-  );
-
-const update = (state: State, { payload: { exercise } }:  ReturnType<typeof updateExercise>): State =>
+const add = (
+  state: State,
+  { payload: { exercise } }: ReturnType<typeof addExercise>,
+): State =>
   assign(
     state,
     st => ({
-        ...st,
-        [ exercise.id ]: exercise,
-      }),
+      ...st,
+      [ exercise.id ]: exercise,
+    }),
   );
 
-const remove = (state: State, { payload }:  ReturnType<typeof removeExercise>): State =>
+const update = (
+  state: State,
+  { payload: { exercise } }: ReturnType<typeof updateExercise>,
+): State =>
+  assign(
+    state,
+    st => ({
+      ...st,
+      [ exercise.id ]: exercise,
+    }),
+  );
+
+const remove = (
+  state: State,
+  { payload: { id } }: ReturnType<typeof removeExercise>,
+): State =>
   assign(
     state,
     st => {
-      delete st[payload.id];
-      return st;
+      const temp = { ...st };
+      delete temp[ id ];
+      return temp;
     },
   );
 
@@ -44,15 +58,19 @@ import * as initialExercises from '../../constants/initialExercises';
 
 const initialState = Object
   .keys(initialExercises)
-  .map((k: any) => ((initialExercises as any)[k]) as Exercise)
-  .reduce((exs, exercise) => {
-      exs[exercise.id] = exercise;
+  .map((k: any) => ((initialExercises as any)[ k ]) as Exercise)
+  .reduce(
+    (exs, exercise) => {
+      exs[ exercise.id ] = exercise;
       return exs;
     },
-          { } as IHomogenousObject<Exercise>,
+    {} as HomogenousObject<Exercise>,
   );
 
-export const exercises = (state: State = initialState, action: Action): State => {
+export const exercises = (
+  state: State = initialState,
+  action: Action,
+): State => {
   switch (action.type) {
     case EXERCISE_ADDED:
       return add(state, action);

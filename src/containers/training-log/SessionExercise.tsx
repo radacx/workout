@@ -1,19 +1,23 @@
 import { connect } from 'react-redux';
 import {
-  ISessionExerciseDataProps,
-  ISessionExerciseOwnProps,
+  SessionExerciseDataProps,
+  SessionExerciseOwnProps,
   SessionExercise as SessionExerciseComponent,
 } from '../../components/training-log/SessionExercise';
-import { IAppState } from '../../models/state/IAppState';
+import { AppState } from '../../models/state/AppState';
 import { ComponentClass } from 'react';
-import { ISessionExercise } from '../../models/interfaces/ITrainingSession';
+import { SessionExercise as SessionExerciseModel } from '../../models/data/SessionExercise';
 
-interface SessionExerciseContainerProps extends ISessionExerciseOwnProps {
-  readonly exerciseId: ISessionExercise['exercise'];
-}
+type Props = Readonly<SessionExerciseOwnProps
+  & {
+  exerciseId: SessionExerciseModel['exercise'];
+}>;
 
-const mapStateToProps = (state: IAppState, { exerciseId }: SessionExerciseContainerProps): ISessionExerciseDataProps => {
-  const exercise = state.exercises[exerciseId];
+const mapStateToProps = (
+  state: AppState,
+  { exerciseId }: Props,
+): SessionExerciseDataProps => {
+  const exercise = state.exercises[ exerciseId ];
 
   return {
     exerciseName: exercise.name,
@@ -21,6 +25,6 @@ const mapStateToProps = (state: IAppState, { exerciseId }: SessionExerciseContai
   };
 };
 
-export const SessionExercise: ComponentClass<SessionExerciseContainerProps> = connect(
+export const SessionExercise: ComponentClass<Props> = connect(
   mapStateToProps,
 )(SessionExerciseComponent);

@@ -4,8 +4,6 @@
   "private": true,
   "scripts": {
     "start": "node node_modules/react-native/local-cli/cli.js start",
-    "test": "jest",
-    "windows": "concurrently -r \"npm run watch\" \"react-native run-windows\"",
     "android": "concurrently -r \"npm run watch\" \"react-native run-android\"",
     "tsc": "tsc",
     "clean": "rimraf dist",

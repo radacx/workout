@@ -1,19 +1,21 @@
 import * as React from 'react';
 import { Picker } from 'react-native';
 
-interface IComboBoxProps<T> {
-  readonly items: T[];
-  readonly getLabel: (item: T) => string;
-  readonly onItemChange: (item: T) => void;
-}
+type Props<T> = Readonly<{
+  items: T[];
+  getLabel: (item: T) => string;
+  onItemChange: (item: T) => void;
+}>;
 
-interface IComboBoxState<T> {
-  readonly selectedItem: T;
-}
+type State<T> = Readonly<{
+  selectedItem: T;
+}>;
 
-export class ComboBox<T> extends React.PureComponent<IComboBoxProps<T>, IComboBoxState<T>> {
-  readonly state: IComboBoxState<T> = {
-    selectedItem: this.props.items[0],
+export class ComboBox<T> extends React.PureComponent<Props<T>, State<T>> {
+  static displayName = 'ComboBox';
+
+  readonly state: State<T> = {
+    selectedItem: this.props.items[ 0 ],
   };
 
   _selectedItemChanged = (item: T) => {
@@ -30,7 +32,7 @@ export class ComboBox<T> extends React.PureComponent<IComboBoxProps<T>, IComboBo
         key={index}
         label={this.props.getLabel(item)}
         value={item}
-      />
+      />,
     );
 
     return (

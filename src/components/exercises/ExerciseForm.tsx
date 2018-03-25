@@ -7,20 +7,19 @@ import {
   Switch,
 } from 'react-native';
 import React from 'react';
-const RadioForm = require('react-native-simple-radio-button').default;
 import { MuscleGroup } from '../../models/enums/MuscleGroup';
 import { MovementPlane } from '../../models/enums/MovementPlane';
 import { createNewId } from '../../utils/createNewId';
 import { ExerciseType } from '../../models/enums/ExerciseType';
 import { NavigationManager } from './ExercisesList';
-import { createNavigationProps } from '../../utils/createNavigationProps';
+import { getNavigationHelperForComponent } from '../../utils/getNavigationHelperForComponent';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
-import { Exercise } from '../../models/Exercise';
+import { Exercise } from '../../models/data/Exercise';
 import { NumericInput } from '../NumericInput';
-import {
-  SpecialSelectOption,
-  SpecialSelectSelection,
-} from '../SpecialSelect';
+import { SpecialSelectSelection } from '../special-select/SpecialSelectSelection';
+import { SpecialSelectOption } from '../special-select/SpecialSelectOption';
+
+const RadioForm = require('react-native-simple-radio-button').default;
 
 export interface ExerciseFormCallbackProps {
   addExercise: (exercise: Exercise) => void;
@@ -31,17 +30,17 @@ export interface ExerciseFormDataProps {
   exercise?: Exercise;
 }
 
-type Props = ExerciseFormCallbackProps & ExerciseFormDataProps;
+type Props = Readonly<ExerciseFormCallbackProps & ExerciseFormDataProps>;
 
-interface State {
-  readonly primaryMuscleGroups: MuscleGroup[];
-  readonly secondaryMuscleGroups: MuscleGroup[];
-  readonly planesOfMovement: MovementPlane[];
-  readonly exerciseType: ExerciseType;
-  readonly name: string;
-  readonly isBodyweight: boolean;
-  readonly relativeBodyweight?: number;
-}
+type State = Readonly<{
+  primaryMuscleGroups: MuscleGroup[];
+  secondaryMuscleGroups: MuscleGroup[];
+  planesOfMovement: MovementPlane[];
+  exerciseType: ExerciseType;
+  name: string;
+  isBodyweight: boolean;
+  relativeBodyweight: number;
+}>;
 
 const radioProps = [
   {
@@ -80,12 +79,12 @@ const chunkInTwo = (planes: string[]): string[][] => {
 
 const planesOfMovementOptions = chunkInTwo(planesOfMovement)
   .map(chunk => ({
-    leftValue: chunk[0],
-    rightValue: chunk[1],
+    leftValue: chunk[ 0 ],
+    rightValue: chunk[ 1 ],
   }));
 
 const defaultState: State = {
-  exerciseType: radioProps[0].value,
+  exerciseType: radioProps[ 0 ].value,
   name: '',
   planesOfMovement: [],
   primaryMuscleGroups: [],
@@ -101,34 +100,36 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
 
   componentWillMount() {
     const exercise = this.props.exercise;
+
     if (exercise) {
       const { id: _, ...ex } = exercise;
-      const isBodyweight = exercise.relativeBodyweight !== undefined;
-      const relativeBodyweight = exercise.relativeBodyweight;
+      const isBodyweight = exercise.relativeBodyweight > 0;
 
       this.setState({
         ...ex,
-        relativeBodyweight,
         isBodyweight,
       });
     }
   }
 
   _submitExercise = () => {
-    const id = this.props.exercise ? this.props.exercise.id : createNewId();
+    const id = this.props.exercise
+      ? this.props.exercise.id
+      : createNewId();
 
-    const { isBodyweight, relativeBodyweight, ...exerciseBase } = this.state;
+    const {
+      isBodyweight,
+      relativeBodyweight,
+      ...exerciseBase,
+    } = this.state;
 
-    const exercise = isBodyweight ?
-      {
-        ...exerciseBase,
-        id,
-        relativeBodyweight,
-      } :
-      {
-        ...exerciseBase,
-        id,
-      };
+    const exercise: Exercise = {
+      ...exerciseBase,
+      id,
+      relativeBodyweight: isBodyweight
+        ? relativeBodyweight
+        : 0,
+    };
 
     if (this.props.exercise) {
       this.props.updateExercise(exercise);
@@ -184,7 +185,11 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
   };
 
   _navigateToPlanesOfMovement = () =>
-    this._navigateToSpecialSelect(planesOfMovementOptions, this._planesOfMovementSubmitted, this._getPlanesOfMovementPreselectedOptions);
+    this._navigateToSpecialSelect(
+      planesOfMovementOptions,
+      this._planesOfMovementSubmitted,
+      this._getPlanesOfMovementPreselectedOptions,
+    );
 
   _muscleGroupsSubmitted = (selectedOptions: SpecialSelectSelection[]) => {
     const primaryMuscleGroups: MuscleGroup[] = [];
@@ -192,9 +197,10 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
 
     muscleGroups
       .forEach((muscleGroup, index) => {
-        if (selectedOptions[index] === SpecialSelectSelection.Left) {
+        if (selectedOptions[ index ] === SpecialSelectSelection.Left) {
           primaryMuscleGroups.push(muscleGroup as any);
-        } else if (selectedOptions[index] === SpecialSelectSelection.Right) {
+        } else if (selectedOptions[ index ]
+          === SpecialSelectSelection.Right) {
           secondaryMuscleGroups.push(muscleGroup as any);
         }
       });
@@ -206,40 +212,54 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
   };
 
   _getMuscleGroupPreselectedOptions = (): SpecialSelectSelection[] => {
-    const primaryMgs = this.state.primaryMuscleGroups.map(mg => mg.toString());
-    const secondaryMgs = this.state.secondaryMuscleGroups.map(mg => mg.toString());
+    const primaryMgs = this.state.primaryMuscleGroups.map(
+      mg => mg.toString());
+    const secondaryMgs = this.state.secondaryMuscleGroups.map(
+      mg => mg.toString());
 
     return muscleGroups.map(mg => {
       if (primaryMgs.indexOf(mg) !== -1) {
         return SpecialSelectSelection.Left;
       } else if (secondaryMgs.indexOf(mg) !== -1) {
         return SpecialSelectSelection.Right;
-      } else {
-        return SpecialSelectSelection.Default;
       }
+
+      return SpecialSelectSelection.Default;
     });
   };
 
   _navigateToMuscleGroups = () =>
-    this._navigateToSpecialSelect(muscleGroupOptions, this._muscleGroupsSubmitted, this._getMuscleGroupPreselectedOptions);
+    this._navigateToSpecialSelect(
+      muscleGroupOptions,
+      this._muscleGroupsSubmitted,
+      this._getMuscleGroupPreselectedOptions,
+    );
 
-  _navigateToSpecialSelect = (options: SpecialSelectOption[], onSubmit: (selectedOptions: SpecialSelectSelection[]) => void, getPreselectedOptions: () => SpecialSelectSelection[]) => {
-    NavigationManager.showModal(createNavigationProps(componentsWithNavigationProps.SpecialSelect)(
-      {
-        passProps: {
-          options,
-          preselectedOptions: getPreselectedOptions(),
-          onSubmit: (selectedOptions: SpecialSelectSelection[]) => {
-            onSubmit(selectedOptions);
-            NavigationManager.dismissModal();
-          },
-        },
-        navigatorStyle: {
-          screenBackgroundColor: 'white',
+  _navigateToSpecialSelect = (
+    options: SpecialSelectOption[],
+    onSubmit: (selectedOptions: SpecialSelectSelection[]) => void,
+    getPreselectedOptions: () => SpecialSelectSelection[],
+  ) => {
+    const helper = getNavigationHelperForComponent(
+      componentsWithNavigationProps.SpecialSelect);
+
+    helper.setTitle('Muscle groups');
+
+    const params = helper.createNavParams({
+      passProps: {
+        options,
+        preselectedOptions: getPreselectedOptions(),
+        onSubmit: (selectedOptions: SpecialSelectSelection[]) => {
+          onSubmit(selectedOptions);
+          NavigationManager.dismissModal();
         },
       },
-      'Muscle groups',
-    ));
+      navigatorStyle: {
+        screenBackgroundColor: 'white',
+      },
+    });
+
+    NavigationManager.showModal(params);
   };
 
   _isBodyweightChanged = () =>
@@ -271,25 +291,25 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
           onValueChange={this._isBodyweightChanged}
         />
 
-        {this.state.isBodyweight &&
-          <View>
-            <Text>
-              Relative bodyweight:
-            </Text>
-            <Slider
-              maximumValue={100}
-              minimumValue={0}
-              value={this.state.relativeBodyweight}
-              step={1}
-              onValueChange={this._relativeBodyweightChanged}
-            />
-            <NumericInput
-              minValue={0}
-              maxValue={100}
-              initialNumber={this.state.relativeBodyweight}
-              onChangeNumber={this._relativeBodyweightChanged}
-            />
-          </View>
+        {this.state.isBodyweight
+        && <View>
+          <Text>
+            Relative bodyweight:
+          </Text>
+          <Slider
+            maximumValue={100}
+            minimumValue={0}
+            value={this.state.relativeBodyweight}
+            step={1}
+            onValueChange={this._relativeBodyweightChanged}
+          />
+          <NumericInput
+            minValue={0}
+            maxValue={100}
+            initialNumber={this.state.relativeBodyweight}
+            onChangeNumber={this._relativeBodyweightChanged}
+          />
+        </View>
         }
 
         <RadioForm

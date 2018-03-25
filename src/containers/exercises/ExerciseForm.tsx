@@ -7,32 +7,36 @@ import {
   ExerciseForm as ExerciseFormComponent,
   ExerciseFormDataProps,
 } from '../../components/exercises/ExerciseForm';
-import { IAppState } from '../../models/state/IAppState';
+import { AppState } from '../../models/state/AppState';
 import * as React from 'react';
 import {
   addExercise,
   updateExercise,
-} from '../../actions';
-import { Exercise } from '../../models/Exercise';
+} from '../../actions/actionCreators';
+import { Exercise } from '../../models/data/Exercise';
 import { Guid } from '../../models/Guid';
 
-interface ExerciseFormContainerProps {
+type Props = Readonly<{
   id?: Guid;
-}
+}>;
 
-const mapStateToProps = (state: IAppState, { id }: ExerciseFormContainerProps): ExerciseFormDataProps => ({
-  exercise: id ? state.exercises[id] : undefined,
+const mapStateToProps = (
+  state: AppState,
+  { id }: Props,
+): ExerciseFormDataProps => ({
+  exercise: id
+    ? state.exercises[ id ]
+    : undefined,
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<IAppState>): ExerciseFormCallbackProps => ({
+const mapDispatchToProps = (dispatch: Dispatch<AppState>): ExerciseFormCallbackProps => ({
   addExercise: (exercise: Exercise) =>
     dispatch(addExercise(exercise)),
   updateExercise: (exercise: Exercise) =>
     dispatch(updateExercise(exercise)),
 });
 
-export const ExerciseForm: React.ComponentClass<ExerciseFormContainerProps> = connect(
+export const ExerciseForm: React.ComponentClass<Props> = connect(
   mapStateToProps,
-  mapDispatchToProps
-)
-(ExerciseFormComponent);
+  mapDispatchToProps,
+)(ExerciseFormComponent);

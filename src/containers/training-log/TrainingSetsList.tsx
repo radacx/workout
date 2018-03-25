@@ -8,11 +8,11 @@ import {
   TrainingSetsListCallbackProps,
 } from '../../components/training-log/TrainingSetsList';
 import { ComponentClass } from 'react';
-import { IAppState } from '../../models/state/IAppState';
+import { AppState } from '../../models/state/AppState';
 import { Guid } from '../../models/Guid';
-import { setExerciseId } from '../../actions/index';
+import { setExerciseId } from '../../actions/actionCreators';
 
-const mapDispatchToProps = (dispatch: Dispatch<IAppState>): TrainingSetsListCallbackProps => ({
+const mapDispatchToProps = (dispatch: Dispatch<AppState>): TrainingSetsListCallbackProps => ({
   setExerciseId: (id: Guid) =>
     dispatch(setExerciseId(id)),
 });

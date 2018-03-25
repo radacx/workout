@@ -6,26 +6,31 @@ import {
 } from 'react-native';
 import { styles } from '../../constants/styles';
 import { NavigationManager } from './ExercisesList';
-import { createNavigationProps } from '../../utils/createNavigationProps';
+import { getNavigationHelperForComponent } from '../../utils/getNavigationHelperForComponent';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
 import { Guid } from '../../models/Guid';
 
-export interface IExerciseDataProps {
-  readonly name: string;
-  readonly id: Guid;
+export interface ExerciseDataProps {
+  name: string;
+  id: Guid;
 }
 
-type ExerciseProps = IExerciseDataProps;
+type Props = Readonly<ExerciseDataProps>;
 
-export class Exercise extends React.PureComponent<ExerciseProps> {
+export class Exercise extends React.PureComponent<Props> {
   static displayName = 'Exercise';
 
   _navigateToExerciseForm = () => {
-    NavigationManager.push(createNavigationProps(componentsWithNavigationProps.ExerciseForm)({
+    const helper = getNavigationHelperForComponent(
+      componentsWithNavigationProps.ExerciseForm);
+
+    const params = helper.createNavParams({
       passProps: {
         id: this.props.id,
       },
-    }));
+    });
+
+    NavigationManager.push(params);
   };
 
   render() {
@@ -34,6 +39,7 @@ export class Exercise extends React.PureComponent<ExerciseProps> {
         <Text style={styles.exercise}>
           {this.props.name}
         </Text>
+
         <Button
           title="View details"
           onPress={this._navigateToExerciseForm}

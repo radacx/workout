@@ -1,6 +1,6 @@
-import { IHomogenousObject } from '../models/interfaces/IHomogenousObject';
+import { HomogenousObject } from '../models/HomogenousObject';
 
-export const homogenousObjectToArray = <T>(obj: IHomogenousObject<T>): T[] =>
+export const homogenousObjectToArray = <T>(obj: HomogenousObject<T>): T[] =>
   Object
     .keys(obj)
-    .map((key: any) => obj[key]);
+    .map((key: any) => obj[ key ]);

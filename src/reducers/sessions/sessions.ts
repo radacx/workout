@@ -1,5 +1,5 @@
-import { IHomogenousObject } from '../../models/interfaces/IHomogenousObject';
-import { ITrainingSession } from '../../models/interfaces/ITrainingSession';
+import { HomogenousObject } from '../../models/HomogenousObject';
+import { TrainingSession } from '../../models/data/TrainingSession';
 import {
   assign,
   assignWithGet,
@@ -15,7 +15,7 @@ import {
   TRAINING_SET_REMOVED,
   TRAINING_SET_UPDATED,
 } from '../../constants/actionTypes';
-import {Action} from '../../models/Action';
+import { Action } from '../../models/state/Action';
 import {
   addSessionExercise,
   addTrainingSession,
@@ -26,34 +26,44 @@ import {
   updateSessionExercise,
   updateTrainingSession,
   updateTrainingSet,
-} from '../../actions';
+} from '../../actions/actionCreators';
 
-type State = IHomogenousObject<ITrainingSession>;
+type State = Readonly<HomogenousObject<TrainingSession>>;
 
 const initialState: State = {};
 
-const addTrainingSessionReducer = (state: State, { payload: { session } }: ReturnType<typeof addTrainingSession>): State =>
+const addTrainingSessionReducer = (
+  state: State,
+  { payload: { session } }: ReturnType<typeof addTrainingSession>,
+): State =>
   assign(
     state,
-    st => {
-      st[session.id] = session;
-      return st;
-    }
+    st => ({
+      ...st,
+      [ session.id ]: session,
+    }),
   );
 
-const removeTrainingSessionReducer = (state: State, { payload: { id } }: ReturnType<typeof removeTrainingSession>): State =>
+const removeTrainingSessionReducer = (
+  state: State,
+  { payload: { id } }: ReturnType<typeof removeTrainingSession>,
+): State =>
   assign(
     state,
     st => {
-      delete st[id];
-      return st;
+      const temp = { ...st };
+      delete temp[ id ];
+      return temp;
     },
   );
 
-const updateTrainingSessionReducer = (state: State, { payload: { session: { id, bodyweight, date } } }: ReturnType<typeof updateTrainingSession>): State =>
+const updateTrainingSessionReducer = (
+  state: State,
+  { payload: { session: { id, bodyweight, date } } }: ReturnType<typeof updateTrainingSession>,
+): State =>
   assignWithGet(
     state,
-    st => st[id],
+    st => st[ id ],
     sess => ({
       ...sess,
       bodyweight,
@@ -61,60 +71,78 @@ const updateTrainingSessionReducer = (state: State, { payload: { session: { id, 
     }),
   );
 
-const removeSessionExerciseReducer = (state: State, { payload: { id, formIds } }: ReturnType<typeof removeSessionExercise>): State =>
+const removeSessionExerciseReducer = (
+  state: State,
+  { payload: { id, formIds } }: ReturnType<typeof removeSessionExercise>,
+): State =>
   assignWithGet(
     state,
-    st => st[formIds.session].exercises,
+    st => st[ formIds.session ].exercises,
     exs => {
-      delete exs[id];
+      delete exs[ id ];
       return exs;
     },
   );
 
-const updateSessionExerciseReducer = (state: State, { payload: { formIds, sessionExercise } }: ReturnType<typeof updateSessionExercise>): State =>
+const updateSessionExerciseReducer = (
+  state: State,
+  { payload: { formIds, sessionExercise } }: ReturnType<typeof updateSessionExercise>,
+): State =>
   assignWithGet(
     state,
-    st => st[formIds.session].exercises,
+    st => st[ formIds.session ].exercises,
     exs => {
-      exs[sessionExercise.id] = sessionExercise;
+      exs[ sessionExercise.id ] = sessionExercise;
       return exs;
     },
   );
 
-const addSessionExerciseReducer = (state: State, { payload: { sessionExercise, formIds: { session } } }: ReturnType<typeof addSessionExercise>): State =>
+const addSessionExerciseReducer = (
+  state: State,
+  { payload: { sessionExercise, formIds: { session } } }: ReturnType<typeof addSessionExercise>,
+): State =>
   assignWithGet(
     state,
-    st => st[session].exercises,
+    st => st[ session ].exercises,
     exercises => {
       exercises[ sessionExercise.id ] = sessionExercise;
       return exercises;
     },
   );
 
-const removeTrainingSetReducer = (state: State, { payload: { id, formIds } }: ReturnType<typeof removeTrainingSet>): State =>
+const removeTrainingSetReducer = (
+  state: State,
+  { payload: { id, formIds } }: ReturnType<typeof removeTrainingSet>,
+): State =>
   assignWithGet(
     state,
-    st => st[formIds.session].exercises[formIds.exercise].sets,
+    st => st[ formIds.session ].exercises[ formIds.exercise ].sets,
     sts => {
-      delete sts[id];
+      delete sts[ id ];
       return sts;
     },
   );
 
-const updateTrainingSetReducer = (state: State, { payload: { formIds, trainingSet } }: ReturnType<typeof updateTrainingSet>): State =>
+const updateTrainingSetReducer = (
+  state: State,
+  { payload: { formIds, trainingSet } }: ReturnType<typeof updateTrainingSet>,
+): State =>
   assignWithGet(
     state,
-    st => st[formIds.session].exercises[formIds.exercise],
+    st => st[ formIds.session ].exercises[ formIds.exercise ],
     ex => {
-      ex.sets[trainingSet.id] = trainingSet;
+      ex.sets[ trainingSet.id ] = trainingSet;
       return ex;
-    }
+    },
   );
 
-const addTrainingSetReducer = (state: State, { payload: { trainingSet, formIds: { session, exercise } } }: ReturnType<typeof addTrainingSet>): State =>
+const addTrainingSetReducer = (
+  state: State,
+  { payload: { trainingSet, formIds: { session, exercise } } }: ReturnType<typeof addTrainingSet>,
+): State =>
   assignWithGet(
     state,
-    st => st[session].exercises[exercise].sets,
+    st => st[ session ].exercises[ exercise ].sets,
     sets => {
       sets[ trainingSet.id ] = trainingSet;
       return sets;

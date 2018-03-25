@@ -6,41 +6,50 @@ import {
   View,
 } from 'react-native';
 import { Navigator } from 'react-native-navigation';
-import { IScreen } from '../../models/interfaces/IScreen';
+import { Screen } from '../../models/navigation/Screen';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
-import { ITrainingSession } from '../../models/interfaces/ITrainingSession';
-import { createNavigationProps } from '../../utils/createNavigationProps';
+import { TrainingSession as TrainingSessionModel } from '../../models/data/TrainingSession';
+import { getNavigationHelperForComponent } from '../../utils/getNavigationHelperForComponent';
+import { createNewId } from '../../utils/createNewId';
+import { sessionsSelector } from '../../selectors/sessionsSelector';
 
 export let NavigationManager: Navigator;
 
 export interface TrainingLogCallbackProps {
-  readonly addNewTrainingSession: (session: ITrainingSession) => void;
+  addNewTrainingSession: (session: TrainingSessionModel) => void;
 }
 
-type Props = IScreen & TrainingLogCallbackProps;
+type Props = Readonly<Screen & TrainingLogCallbackProps>;
 
 export class TrainingLog extends React.PureComponent<Props> {
+  static displayName = 'TrainingLog';
+
   _navigateToSessionForm = () => {
-    const session: ITrainingSession = {
-      id: new Date().getTime().toString(),
+    const date = new Date().getTime();
+    const id = createNewId();
+
+    const session: TrainingSessionModel = {
+      id,
       exercises: {},
-      date: new Date().getTime(),
+      date,
       bodyweight: 0,
     };
 
-    NavigationManager.push(
-      {
-        ...createNavigationProps(
-          componentsWithNavigationProps.TrainingSessionForm)(
-          {
-            passProps: {
-              sessionId: session.id,
-            },
-          }),
-         animated: false,
-      });
-
     this.props.addNewTrainingSession(session);
+
+    const helper = getNavigationHelperForComponent(
+      componentsWithNavigationProps.TrainingSessionForm);
+
+    const params = helper.createNavParams({
+      passProps: {
+        sessionId: session.id,
+      },
+    });
+
+    NavigationManager.push({
+      ...params,
+      animated: false,
+    });
   };
 
   componentDidMount() {
@@ -54,8 +63,9 @@ export class TrainingLog extends React.PureComponent<Props> {
           title="Add new session"
           onPress={this._navigateToSessionForm}
         />
+
         <ComponentList
-          getIdsFromState={state => state.sessions}
+          getIdsFromState={sessionsSelector}
           component={TrainingSession}
         />
       </View>

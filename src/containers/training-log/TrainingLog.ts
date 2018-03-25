@@ -7,12 +7,12 @@ import {
   TrainingLog as TrainingLogComponent,
   TrainingLogCallbackProps,
 } from '../../components/training-log/TrainingLog';
-import { IAppState } from '../../models/state/IAppState';
-import { ITrainingSession } from '../../models/interfaces/ITrainingSession';
-import { addTrainingSession } from '../../actions/index';
+import { AppState } from '../../models/state/AppState';
+import { TrainingSession } from '../../models/data/TrainingSession';
+import { addTrainingSession } from '../../actions/actionCreators';
 
-const mapDispatchToProps = (dispatch: Dispatch<IAppState>): TrainingLogCallbackProps => ({
-  addNewTrainingSession: (session: ITrainingSession) =>
+const mapDispatchToProps = (dispatch: Dispatch<AppState>): TrainingLogCallbackProps => ({
+  addNewTrainingSession: (session: TrainingSession) =>
     dispatch(addTrainingSession(session)),
 });
 

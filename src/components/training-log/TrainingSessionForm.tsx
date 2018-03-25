@@ -1,40 +1,44 @@
-import DatePicker from 'react-native-datepicker';
 import {
   View,
   Text,
   Button,
 } from 'react-native';
 import * as React from 'react';
-import { dateUtils } from '../../utils/dateUtils';
 import { NumericInput } from '../NumericInput';
 import { SessionExercisesList } from '../../containers/training-log/SessionExercisesList';
 import { Guid } from '../../models/Guid';
-import { IUpdatedSession } from '../../models/interfaces/IUpdatedSession';
-
-interface State {
-  readonly date: string;
-  readonly bodyweight: number;
-}
+import { UpdatedSession } from '../../models/data/UpdatedSession';
+import { DatePicker } from '../DatePicker';
+import { NavigationManager } from './TrainingLog';
 
 export interface TrainingSessionFormDataProps {
-  readonly date: number;
-  readonly bodyweight: number;
+  date: number;
+  bodyweight: number;
 }
 
 export interface TrainingSessionFormCallbackProps {
-  readonly updateTrainingSession: (session: IUpdatedSession) => void;
+  updateTrainingSession: (session: UpdatedSession) => void;
 }
 
 export interface TrainingSessionFormOwnProps {
-  readonly sessionId: Guid;
+  sessionId: Guid;
 }
 
-type Props = TrainingSessionFormCallbackProps & TrainingSessionFormOwnProps & TrainingSessionFormDataProps;
+type Props = Readonly<TrainingSessionFormCallbackProps
+  & TrainingSessionFormOwnProps
+  & TrainingSessionFormDataProps>;
+
+type State = Readonly<{
+  date: number;
+  bodyweight: number;
+}>;
 
 export class TrainingSessionForm extends React.PureComponent<Props, State> {
+  static displayName = 'TrainingSessionForm';
+
   readonly state: State = {
     bodyweight: this.props.bodyweight,
-    date: dateUtils.toStringFromNumber(this.props.date),
+    date: this.props.date,
   };
 
   _onChangedBodyweight = (bodyweight: number) =>
@@ -42,17 +46,26 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
       bodyweight,
     });
 
-  _onDateChanged = (date: string) =>
+  _onDateChanged = (date: number) =>
     this.setState({
       date,
     });
 
-  _updateTrainingSession = () =>
+  _updateTrainingSession = () => {
     this.props.updateTrainingSession({
-      bodyweight: this.state.bodyweight,
-      date: dateUtils.fromTextToNumber(this.state.date),
+      ...this.state,
       id: this.props.sessionId,
     });
+
+    NavigationManager.pop();
+  };
+
+  componentWillReceiveProps({ date, bodyweight }: Props) {
+    this.setState({
+      date,
+      bodyweight,
+    });
+  }
 
   render() {
     return (
@@ -69,13 +82,7 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
           Date:
         </Text>
         <DatePicker
-          date={dateUtils.fromText(this.state.date)}
-          mode="date"
-          androidMode="spinner"
-          placeholder="Select date"
-          format="DD.MM.YYYY"
-          confirmBtnText="Confirm"
-          cancelBtnText="Cancel"
+          value={this.state.date}
           onDateChange={this._onDateChanged}
         />
 
@@ -84,7 +91,7 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
           onPress={this._updateTrainingSession}
         />
 
-        <SessionExercisesList sessionId={this.props.sessionId} />
+        <SessionExercisesList sessionId={this.props.sessionId}/>
       </View>
     );
   }

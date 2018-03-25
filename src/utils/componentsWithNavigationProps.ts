@@ -3,25 +3,17 @@ import {
 } from '../containers/training-log/SessionExerciseForm';
 import { TrainingSessionForm } from '../containers/training-log/TrainingSessionForm';
 import { TrainingLog } from '../containers/training-log/TrainingLog';
-import { TrainingSetForDuration } from '../containers/training-log/TrainingSetForDuration';
-import { TrainingSetForReps } from '../containers/training-log/TrainingSetForReps';
 import { SessionExercisesList } from '../containers/training-log/SessionExercisesList';
 import { ExercisesList } from '../components/exercises/ExercisesList';
 import { ExerciseForm } from '../containers/exercises/ExerciseForm';
-import { SpecialSelect } from '../components/SpecialSelect';
+import { SpecialSelect } from '../components/special-select/SpecialSelect';
+import { TrainingSet } from '../containers/training-log/TrainingSet';
 
 export const componentsWithNavigationProps = {
-  TrainingSetForReps: {
-    component: TrainingSetForReps,
+  TrainingSet: {
+    component: TrainingSet,
     navigationProps: {
-      screen: 'Container.TrainingSetForReps',
-      title: 'Add set'
-    },
-  },
-  TrainingSetForDuration: {
-    component: TrainingSetForDuration,
-    navigationProps: {
-      screen: 'Container.TrainingSetForDuration',
+      screen: 'Container.TrainingSet',
       title: 'Add set',
     },
   },
@@ -36,8 +28,8 @@ export const componentsWithNavigationProps = {
     component: TrainingSessionForm,
     navigationProps: {
       screen: 'Container.TrainingSessionForm',
-      title: 'Training session form'
-    }
+      title: 'Training session form',
+    },
   },
   SessionExerciseForm: {
     component: SessionExerciseForm,

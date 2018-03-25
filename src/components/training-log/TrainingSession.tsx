@@ -1,4 +1,4 @@
-import { ITrainingSession } from '../../models/interfaces/ITrainingSession';
+import { TrainingSession as TrainingSessionModel } from '../../models/data/TrainingSession';
 import React from 'react';
 import {
   Button,
@@ -8,30 +8,36 @@ import {
 import { NavigationManager } from './TrainingLog';
 import { Guid } from '../../models/Guid';
 import { componentsWithNavigationProps } from '../../utils/componentsWithNavigationProps';
-import { createNavigationProps } from '../../utils/createNavigationProps';
+import { getNavigationHelperForComponent } from '../../utils/getNavigationHelperForComponent';
 import { dateUtils } from '../../utils/dateUtils';
 
-export interface ITrainingSessionDataProps {
-  readonly session: ITrainingSession;
+export interface TrainingSessionDataProps {
+  session: TrainingSessionModel;
 }
 
-export interface ITrainingSessionCallbackProps {
-  readonly setSessionId: (id: Guid) => void;
+export interface TrainingSessionCallbackProps {
+  setSessionId: (id: Guid) => void;
 }
 
-type TrainingSessionProps = ITrainingSessionDataProps & ITrainingSessionCallbackProps;
+type Props = Readonly<TrainingSessionDataProps
+  & TrainingSessionCallbackProps>;
 
-export class TrainingSession extends React.PureComponent<TrainingSessionProps> {
+export class TrainingSession extends React.PureComponent<Props> {
   static displayName = 'TrainingSessionForm';
 
-  _viewDetails = () => {
+  _navigateToDetails = () => {
     this.props.setSessionId(this.props.session.id);
 
-    NavigationManager.push(createNavigationProps(componentsWithNavigationProps.TrainingSessionForm)({
+    const helper = getNavigationHelperForComponent(
+      componentsWithNavigationProps.TrainingSessionForm);
+
+    const params = helper.createNavParams({
       passProps: {
         sessionId: this.props.session.id,
       },
-    }));
+    });
+
+    NavigationManager.push(params);
   };
 
   render() {
@@ -45,9 +51,10 @@ export class TrainingSession extends React.PureComponent<TrainingSessionProps> {
         <Text>
           {session.bodyweight}
         </Text>
+
         <Button
           title="View details"
-          onPress={this._viewDetails}
+          onPress={this._navigateToDetails}
         />
       </View>
     );

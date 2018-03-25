@@ -4,45 +4,50 @@ import {
   View,
 } from 'react-native';
 import { ComboBox } from '../ComboBox';
-import { IExercise } from '../../models/Exercise';
+import { Exercise } from '../../models/data/Exercise';
 import { NavigationManager } from './TrainingLog';
-import { ISessionExercise } from '../../models/interfaces/ITrainingSession';
+import { SessionExercise } from '../../models/data/SessionExercise';
+import { createNewId } from '../../utils/createNewId';
 
 export interface SessionExerciseFormDataProps {
-  readonly exercises: IExercise[];
+  exercises: Exercise[];
 }
 
 export interface SessionExerciseFormCallbackProps {
-  readonly addExercise: (exercise: ISessionExercise) => void;
+  addExercise: (exercise: SessionExercise) => void;
 }
 
-export type SessionExerciseFormProps = SessionExerciseFormDataProps & SessionExerciseFormCallbackProps;
+export type SessionExerciseFormProps = Readonly<SessionExerciseFormDataProps
+  & SessionExerciseFormCallbackProps>;
 
-interface ISessionExerciseFormState {
-  readonly selectedExercise: IExercise;
-}
+type State = Readonly<{
+  selectedExercise: Exercise;
+}>;
 
-export class SessionExerciseForm extends React.PureComponent<SessionExerciseFormProps, ISessionExerciseFormState> {
-  readonly state: ISessionExerciseFormState = {
-    selectedExercise: this.props.exercises[0],
+export class SessionExerciseForm extends React.PureComponent<SessionExerciseFormProps, State> {
+  static displayName = 'SessionExerciseForm';
+
+  readonly state: State = {
+    selectedExercise: this.props.exercises[ 0 ],
   };
 
-  _exerciseChanged = (exercise: IExercise) =>
+  _exerciseChanged = (exercise: Exercise) =>
     this.setState({
       selectedExercise: exercise,
     });
 
-  _getExerciseLabel = (exercise: IExercise) =>
+  _getExerciseLabel = (exercise: Exercise) =>
     exercise.name;
 
   _submitExercise = () => {
-    const sessionExercise: ISessionExercise = {
-      id: new Date().getTime().toString(),
+    const sessionExercise: SessionExercise = {
+      id: createNewId(),
       sets: {},
       exercise: this.state.selectedExercise.id,
     };
 
     this.props.addExercise(sessionExercise);
+
     NavigationManager.dismissModal();
   };
 
@@ -54,6 +59,7 @@ export class SessionExerciseForm extends React.PureComponent<SessionExerciseForm
           onItemChange={this._exerciseChanged}
           getLabel={this._getExerciseLabel}
         />
+
         <Button
           title="Add exercise"
           onPress={this._submitExercise}

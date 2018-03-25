@@ -3,29 +3,32 @@ import {
   ComponentClass,
 } from 'react-redux';
 import {
-  ITrainingSessionCallbackProps,
-  ITrainingSessionDataProps,
+  TrainingSessionCallbackProps,
+  TrainingSessionDataProps,
   TrainingSession as TrainingSessionComponent,
 } from '../../components/training-log/TrainingSession';
 import { Guid } from '../../models/Guid';
-import { IAppState } from '../../models/state/IAppState';
+import { AppState } from '../../models/state/AppState';
 import { Dispatch } from 'redux';
-import { setSessionId } from '../../actions/index';
+import { setSessionId } from '../../actions/actionCreators';
 
-interface ITrainingSessionContainerProps {
+type Props = Readonly<{
   id: Guid;
-}
+}>;
 
-const mapStateToProps = (state: IAppState, { id }: ITrainingSessionContainerProps): ITrainingSessionDataProps => ({
-   session: state.sessions[id],
+const mapStateToProps = (
+  state: AppState,
+  { id }: Props,
+): TrainingSessionDataProps => ({
+  session: state.sessions[ id ],
 });
 
-const mapDispatchToProps = (dispatch: Dispatch<IAppState>): ITrainingSessionCallbackProps => ({
+const mapDispatchToProps = (dispatch: Dispatch<AppState>): TrainingSessionCallbackProps => ({
   setSessionId: (sessionId: Guid) =>
     dispatch(setSessionId(sessionId)),
 });
 
-export const TrainingSession: ComponentClass<ITrainingSessionContainerProps> = connect(
+export const TrainingSession: ComponentClass<Props> = connect(
   mapStateToProps,
   mapDispatchToProps,
 )(TrainingSessionComponent);

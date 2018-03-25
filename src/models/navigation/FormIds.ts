@@ -1,6 +1,6 @@
 import { Guid } from '../Guid';
 
-export type IFormIds = {
+export interface FormIds {
   session: Guid;
   exercise: Guid;
-};
+}
