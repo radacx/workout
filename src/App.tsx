@@ -3,15 +3,15 @@ import {
   Provider,
   Store,
 } from 'react-redux';
-import { AppState } from './models/state/AppState';
-import { configureStoreForWixNavigation } from './utils/configureStore';
-import { registerScreens } from './utils/registerScreens';
-import { componentsWithNavigationProps } from './utils/componentsWithNavigationProps';
+import { IStore } from './apps/_shared/store/IStore';
+import { configureStoreForWixNavigation } from './apps/_shared/utils/configureStore';
+import { registerScreens } from './navigation/registerScreens';
+import { componentsWithNavigationProps } from './navigation/componentsWithNavigationProps';
 
 const storeCallback = (provider: any) =>
-  (st: Store<AppState>) => {
+  (store: Store<IStore>) => {
     registerScreens(
-      st,
+      store,
       provider,
       componentsWithNavigationProps,
     );

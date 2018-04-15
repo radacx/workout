@@ -13,6 +13,7 @@
   },
   "dependencies": {
     "immutable-assign": "^2.0.4",
+    "prop-types": "^15.6.1",
     "react": "^16.2.0",
     "react-native": "^0.53.0",
     "react-native-datepicker": "^1.6.0",
@@ -26,6 +27,7 @@
     "redux-thunk": "^2.2.0"
   },
   "devDependencies": {
+    "@types/prop-types": "^15.5.2",
     "@types/react": "^16.0.38",
     "@types/react-native": "^0.52.12",
     "@types/react-native-datepicker": "^1.6.2",
