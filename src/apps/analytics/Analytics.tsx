@@ -3,7 +3,7 @@ import {
   View,
 } from 'react-native';
 import React from 'react';
-import { DatePicker } from './apps/_shared/components/DatePicker';
+import { DatePicker } from '../_shared/components/DatePicker';
 
 type Props = Readonly<{}>;
 
