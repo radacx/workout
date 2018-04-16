@@ -2,12 +2,13 @@ import {
   SessionExerciseForm,
 } from '../apps/training-log/containers/SessionExerciseForm';
 import { TrainingSessionForm } from '../apps/training-log/containers/TrainingSessionForm';
-import { TrainingLog } from '../apps/training-log/containers/TrainingLog';
+import { TrainingLogApp } from '../apps/training-log/containers/TrainingLogApp';
 import { SessionExercisesList } from '../apps/training-log/containers/SessionExercisesList';
 import { ExercisesApp } from '../apps/exercises/components/ExercisesApp';
 import { ExerciseForm } from '../apps/exercises/containers/ExerciseForm';
-import { SpecialSelect } from '../apps/_shared/components/special-select/SpecialSelect';
 import { TrainingSet } from '../apps/training-log/containers/TrainingSet';
+import { AnalyticsApp } from '../apps/analytics/containers/AnalyticsApp';
+import { SpecialSelect } from '../apps/_shared/components/special-select/SpecialSelect';
 
 export const componentsWithNavigationProps = {
   TrainingSet: {
@@ -17,10 +18,10 @@ export const componentsWithNavigationProps = {
       title: 'Add set',
     },
   },
-  TrainingLog: {
-    component: TrainingLog,
+  TrainingLogApp: {
+    component: TrainingLogApp,
     navigationProps: {
-      screen: 'Container.TrainingLog',
+      screen: 'Container.TrainingLogApp',
       title: 'Training log',
     },
   },
@@ -45,10 +46,10 @@ export const componentsWithNavigationProps = {
       title: 'Training session',
     },
   },
-  ExercisesList: {
+  ExercisesApp: {
     component: ExercisesApp,
     navigationProps: {
-      screen: 'Components.List',
+      screen: 'Components.ExercisesApp',
       title: 'Exercises',
     },
   },
@@ -63,7 +64,14 @@ export const componentsWithNavigationProps = {
     component: SpecialSelect,
     navigationProps: {
       screen: 'Component.SpecialSelect',
-      title: 'Test',
+      title: 'Select',
+    },
+  },
+  AnalyticsApp: {
+    component: AnalyticsApp,
+    navigationProps: {
+      screen: 'Container.AnalyticsApp',
+      title: 'Training log statistics'
     },
   },
 };

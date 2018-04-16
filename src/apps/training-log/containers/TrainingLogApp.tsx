@@ -1,7 +1,7 @@
 import { ComponentClass } from 'react';
 import { connect } from 'react-redux';
 import {
-  TrainingLogApp as TrainingLogComponent,
+  TrainingLogApp as TrainingLogAppComponent,
   TrainingLogAppCallbackProps,
 } from '../components/TrainingLogApp';
 import { TrainingSession } from '../../_types/data/TrainingSession';
@@ -13,7 +13,7 @@ const mapDispatchToProps = (dispatch: Dispatch): TrainingLogAppCallbackProps => 
     dispatch(addTrainingSession(session)),
 });
 
-export const TrainingLog: ComponentClass = connect(
+export const TrainingLogApp: ComponentClass = connect(
   undefined,
   mapDispatchToProps,
-)(TrainingLogComponent);
+)(TrainingLogAppComponent);

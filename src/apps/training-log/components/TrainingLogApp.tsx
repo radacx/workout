@@ -14,7 +14,6 @@ import { createNewId } from '../../_shared/utils/createNewId';
 import { Validation } from '../../_types/validation/Validation';
 import { IStore } from '../../_shared/store/IStore';
 import { Screen } from '../../_types/navigation/Screen';
-import { ProgressionGraph } from '../../analytics/components/ProgressionGraph';
 
 export let NavigationManager: Navigator;
 
@@ -67,7 +66,6 @@ export class TrainingLogApp extends React.PureComponent<Props> {
   render() {
     return (
       <View>
-        <ProgressionGraph />
         <Button
           title="Add new session"
           onPress={this._navigateToSessionForm}

@@ -8,32 +8,24 @@ const {
   YAxis,
 } = require('react-native-svg-charts');
 
-type Props = {
-  readonly points?: {
-    date: number;
-    value: number;
-  }[];
+export type FilteredValue = {
+  date: number;
+  value: number;
 };
 
-export class ProgressionGraph extends React.PureComponent<Props> {
+export type ProgressionGraphDataProps = {
+  readonly filteredValues: FilteredValue[];
+};
+
+export class ProgressionGraph extends React.PureComponent<ProgressionGraphDataProps> {
   static displayName = 'ProgressionGraph';
 
-  static propTypes: Validation<Props> = {
-    points: PropTypes.arrayOf(PropTypes.object),
+  static propTypes: Validation<ProgressionGraphDataProps> = {
+    filteredValues: PropTypes.arrayOf(PropTypes.object),
   };
 
   render() {
-    let data: number[] = [];
-    let start = 120;
-
-    for (let i = 0; i < 8; i += 1) {
-      data.push(start);
-      const multiplier = (Math.floor(Math.random() * 4) + 2) / 100 + 1;
-      start *= multiplier;
-      if (Math.random() * 8 > 7) {
-        start /= 0.95;
-      }
-    }
+    const data = this.props.filteredValues.map(fv => fv.value);
 
     const min = data.reduce(
       (prev, curr) => Math.min(prev, curr),

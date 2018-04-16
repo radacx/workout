@@ -19,13 +19,18 @@ const storeCallback = (provider: any) =>
     Navigation.startTabBasedApp({
       tabs: [
         {
-          ...componentsWithNavigationProps.TrainingLog.navigationProps,
+          ...componentsWithNavigationProps.TrainingLogApp.navigationProps,
           label: 'Training log',
           icon: require('./img/home.png'),
         },
         {
-          ...componentsWithNavigationProps.ExercisesList.navigationProps,
+          ...componentsWithNavigationProps.ExercisesApp.navigationProps,
           label: 'Exercises',
+          icon: require('./img/home.png'),
+        },
+        {
+          ...componentsWithNavigationProps.AnalyticsApp.navigationProps,
+          label: 'Statistics',
           icon: require('./img/home.png'),
         },
       ],
