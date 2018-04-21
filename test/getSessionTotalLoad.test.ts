@@ -56,7 +56,7 @@ describe('getSessionTotalLoad', () => {
       switch (id) {
         default:
         case '1':
-          relativeBodyweight = 0;
+          relativeBodyweight = 0.5;
       }
 
       return createFakeExercise(id, relativeBodyweight);
@@ -65,6 +65,6 @@ describe('getSessionTotalLoad', () => {
     const result = getSessionTotalLoad(session, getExerciseById);
 
     expect(result)
-      .to.equal(1050);
+      .to.equal(1275);
   });
 });

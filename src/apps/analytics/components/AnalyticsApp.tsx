@@ -27,6 +27,8 @@ export enum AnalyticsFilterBy {
   Exercise = 'Exercise',
 }
 
+const allFilterByValues = Object.keys(AnalyticsFilterBy).map((key: any) => AnalyticsFilterBy[key]);
+
 export type AnalyticsAppDataProps = {
   readonly allExercises: Exercise[];
 };
@@ -36,20 +38,6 @@ type State = {
   readonly dateTo: number;
   readonly filterBy: AnalyticsFilterBy;
   readonly filterExercise: (sessionExercise: SessionExercise) => boolean;
-};
-
-export const getFilterFunction = (sessions: TrainingSession[], getExerciseById: (id: Uuid) => Exercise, state: State): FilteredValue[] => {
-  const { dateFrom, dateTo, filterExercise } = state;
-
-  return sessions
-    .filter(session =>
-      session.date >= dateFrom
-      && session.date <= dateTo
-    )
-    .map(session => ({
-      date: session.date,
-      value: getSessionTotalLoad(session, getExerciseById, filterExercise),
-    }));
 };
 
 export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, State> {
@@ -62,11 +50,11 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
     filterExercise: () => false,
   };
 
-  _changeDateFrom = (dateFrom: number) =>
-    this.setState({ dateFrom });
+  _changeDateFrom = (dateFrom: number) => this.setState({ dateFrom });
 
-  _changeDateTo = (dateTo: number) =>
-    this.setState({ dateTo });
+  _changeDateTo = (dateTo: number) => this.setState({ dateTo });
+
+  _changeFilterBy = (filterBy: AnalyticsFilterBy) => this.setState({ filterBy });
 
   _getExerciseById = (id: Uuid) =>
     this.props.allExercises.find(ex => ex.id === id);
@@ -75,6 +63,20 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
     this.setState({
       filterExercise: (se: SessionExercise) => se.exerciseId === id,
     });
+
+  _getFilterFunction = (sessions: TrainingSession[]): FilteredValue[] => {
+    const { dateFrom, dateTo, filterExercise } = this.state;
+
+    return sessions
+      .filter(session =>
+        session.date >= dateFrom
+        && session.date <= dateTo
+      )
+      .map(session => ({
+        date: session.date,
+        value: getSessionTotalLoad(session, this._getExerciseById, filterExercise),
+      }));
+  };
 
   _setMuscleGroupFilter = (muscleGroup: MuscleGroup) => {
     this.setState({
@@ -135,8 +137,6 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
   };
 
   render() {
-    const filter = this._getFilterComponent();
-
     return (
       <View>
         <Text>
@@ -155,9 +155,15 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
           onDateChange={this._changeDateTo}
         />
 
-        {filter}
+        <ComboBox
+          items={allFilterByValues}
+          onItemChange={this._changeFilterBy}
+          getLabel={filterBy => filterBy}
+        />
 
-        <ProgressionGraph filterFunction={{} as any}/>
+        {this._getFilterComponent()}
+
+        <ProgressionGraph filterFunction={this._getFilterFunction}/>
       </View>
     );
   }
