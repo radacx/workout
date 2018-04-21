@@ -1,3 +1,21 @@
 {
-  "presets": ["react-native"]
+  "env": {
+    "development": {
+      "presets": ["react-native"]
+    },
+    "production": {
+      "presets": ["react-native"]
+    },
+    "test": {
+      "presets": [
+        ["@babel/env", {
+          "targets": {
+            "node": "current"
+          }
+        }],
+        "@babel/typescript"
+      ],
+      "plugins": ["add-module-exports"]
+    }
+  }
 }

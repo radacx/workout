@@ -20,11 +20,12 @@
     "removeComments": true,
     "importHelpers": true,
     "downlevelIteration": true,
-    "isolatedModules": true,
+    "isolatedModules": false,
     "alwaysStrict": true,
     "noImplicitThis": true,
     "baseUrl": "./",
     "allowSyntheticDefaultImports": true,
+    "skipLibCheck": true,
     "sourceRoot": "./",
     "mapRoot": "./"
   },
@@ -32,7 +33,9 @@
     "react",
     "react-native",
     "jest",
-    "redux-persist"
+    "redux-persist",
+    "mocha",
+    "chai"
   ],
   "include": [
     "src/*"

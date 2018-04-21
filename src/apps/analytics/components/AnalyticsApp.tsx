@@ -8,7 +8,6 @@ import { ProgressionGraph } from '../containers/ProgressionGraph';
 import { TrainingSession } from '../../_types/data/TrainingSession';
 import { FilteredValue } from './ProgressionGraph';
 import { SessionExercise } from '../../_types/data/SessionExercise';
-import { homogenousObjectToArray } from '../../_shared/utils/homogenousObjectToArray';
 import { Exercise } from '../../_types/data/Exercise';
 import { Uuid } from '../../_types/Uuid';
 import { ComboBox } from '../../_shared/components/ComboBox';
@@ -20,6 +19,7 @@ import {
   allPlanesOfMovement,
   MovementPlane,
 } from '../../_types/enums/MovementPlane';
+import { getSessionTotalLoad } from '../../_shared/utils/getSessionTotalLoad';
 
 export enum AnalyticsFilterBy {
   MuscleGroup = 'Muscle group',
@@ -38,8 +38,19 @@ type State = {
   readonly filterExercise: (sessionExercise: SessionExercise) => boolean;
 };
 
-const reduceTotalLoad = (totalLoad: number, currentLoad: number) =>
-  totalLoad + currentLoad;
+export const getFilterFunction = (sessions: TrainingSession[], getExerciseById: (id: Uuid) => Exercise, state: State): FilteredValue[] => {
+  const { dateFrom, dateTo, filterExercise } = state;
+
+  return sessions
+    .filter(session =>
+      session.date >= dateFrom
+      && session.date <= dateTo
+    )
+    .map(session => ({
+      date: session.date,
+      value: getSessionTotalLoad(session, getExerciseById, filterExercise),
+    }));
+};
 
 export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, State> {
   static displayName = 'AnalyticsApp';
@@ -59,41 +70,6 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
 
   _getExerciseById = (id: Uuid) =>
     this.props.allExercises.find(ex => ex.id === id);
-
-  _getFilterFunction = (sessions: TrainingSession[]): FilteredValue[] => {
-    const { dateFrom, dateTo, filterExercise } = this.state;
-
-    return sessions
-      .filter(session =>
-        session.date >= dateFrom
-        && session.date <= dateTo
-      )
-      .map(session => {
-        const { bodyweight } = session;
-        const exercises = homogenousObjectToArray(session.exercises).filter(filterExercise);
-
-        const totalWeight = exercises
-          .map(ex => {
-            const exercise = this._getExerciseById(ex.exerciseId);
-            const sets = homogenousObjectToArray(ex.sets);
-
-            const bodyweightAddition = exercise
-              ? bodyweight * exercise.relativeBodyweight
-              : 0;
-
-            return bodyweightAddition * sets.length
-            + sets
-              .map(set => set.weight || 0)
-              .reduce(reduceTotalLoad, 0);
-          })
-          .reduce(reduceTotalLoad, 0);
-
-        return {
-          date: session.date,
-          value: totalWeight,
-        };
-      });
-  };
 
   _setExerciseFilter = ({ id }: Exercise) =>
     this.setState({
@@ -181,7 +157,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
 
         {filter}
 
-        <ProgressionGraph filterFunction={this._getFilterFunction}/>
+        <ProgressionGraph filterFunction={{} as any}/>
       </View>
     );
   }

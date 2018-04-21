@@ -7,12 +7,10 @@ import {
 } from '../constants/actionTypes';
 import { createAction } from '../../_shared/utils/createAction';
 
-export const addExercise = createAction((exercise: Exercise) => (
-  {
-    type: Exercises_AddExercise,
-    payload: { exercise },
-  }
-));
+export const addExercise = createAction((exercise: Exercise) => ({
+  type: Exercises_AddExercise,
+  payload: { exercise },
+}));
 
 export const updateExercise = createAction((exercise: Exercise) => ({
   type: Exercises_UpdateExercise,
