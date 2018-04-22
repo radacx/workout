@@ -21,13 +21,9 @@ export const getSessionTotalLoad = ({ bodyweight, exercises }: TrainingSession, 
         return 0;
       }
 
-      const sets = homogenousObjectToArray(ex.sets);
+      const bodyweightAddition = bodyweight * exercise.relativeBodyweight / 100;
 
-      const bodyweightAddition = exercise
-        ? bodyweight * exercise.relativeBodyweight
-        : 0;
-
-      return sets
+      return homogenousObjectToArray(ex.sets)
           .map(set => set.repsDuration * ((set.weight || 0) + bodyweightAddition))
           .reduce(reduceTotalLoad, 0);
     })

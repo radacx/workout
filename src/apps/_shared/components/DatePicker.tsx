@@ -10,6 +10,7 @@ type Props = {
   readonly confirmBtnText?: string;
   readonly cancelBtnText?: string;
   readonly value?: number;
+  readonly disabled?: boolean;
   readonly onDateChange: (date: number) => void;
 };
 
@@ -27,6 +28,7 @@ export class DatePicker extends React.PureComponent<Props, State> {
     confirmBtnText: PropTypes.string,
     cancelBtnText: PropTypes.string,
     value: PropTypes.number,
+    disabled: PropTypes.bool,
   };
 
   static defaultProps: Partial<Props> = {
@@ -35,6 +37,7 @@ export class DatePicker extends React.PureComponent<Props, State> {
     confirmBtnText: 'Confirm',
     cancelBtnText: 'Cancel',
     value: dateUtils.toNumber(new Date()),
+    disabled: false,
   };
 
   constructor(props: Props) {
@@ -66,10 +69,12 @@ export class DatePicker extends React.PureComponent<Props, State> {
       format,
       confirmBtnText,
       cancelBtnText,
+      disabled,
     } = this.props;
 
     return (
       <CustomDatePicker
+        disabled={disabled}
         date={this.state.date}
         placeholder={placeholder}
         format={format}

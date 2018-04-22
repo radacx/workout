@@ -1,4 +1,15 @@
 export const dateUtils = Object.freeze({
+  today: () => {
+    const now = new Date();
+    return new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  },
+
+  getWeek: (date: Date): number => 0,
+
+  todayToString: () => dateUtils.toString(dateUtils.today()),
+
+  todayToNumber: () => dateUtils.toNumber(dateUtils.today()),
+
   getDifference: (date1: Date, date2: Date) =>
     date1 > date2
       ? new Date(+date1 - +date2)

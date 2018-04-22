@@ -2,75 +2,86 @@ import PropTypes from 'prop-types';
 import * as React from 'react';
 import { View } from 'react-native';
 import { Validation } from '../../_types/validation/Validation';
-import { curveMonotoneX } from 'd3-shape';
+import { dateUtils } from '../../_shared/utils/dateUtils';
 const {
   LineChart,
   YAxis,
+  XAxis,
+  Grid,
 } = require('react-native-svg-charts');
+import { curveMonotoneX } from 'd3-shape';
 
-export type FilteredValue = {
-  date: number;
-  value: number;
+export type Point = {
+  x: string;
+  y: number;
 };
 
 export type ProgressionGraphDataProps = {
-  readonly filteredValues: FilteredValue[];
+  readonly points: Point[];
 };
 
 export class ProgressionGraph extends React.PureComponent<ProgressionGraphDataProps> {
   static displayName = 'ProgressionGraph';
 
   static propTypes: Validation<ProgressionGraphDataProps> = {
-    filteredValues: PropTypes.arrayOf(PropTypes.object),
+    points: PropTypes.arrayOf(PropTypes.shape({
+      x: PropTypes.string.isRequired,
+      y: PropTypes.number.isRequired,
+    }).isRequired),
   };
 
+  _formatLoad = (load: any) => `${load} kg`;
+
+  _formatDate = (date: number) => dateUtils.toStringFromNumber(date);
+
+  componentDidMount() {
+    console.log(',pinted;')
+  }
+
   render() {
-    const data = this.props.filteredValues.map(fv => fv.value);
+    console.log('render');
+    const axesSvg = { fontSize: 10, fill: 'grey' };
+    const xAxisHeight = 30;
 
-    const min = data.reduce(
-      (prev, curr) => Math.min(prev, curr),
-      Number.MAX_SAFE_INTEGER,
-    );
+    const dataY = this.props.points.map(fv => fv.y);
+    const dataX = this.props.points.map(fv => fv.x);
 
-    const max = data.reduce(
-      (prev, curr) => Math.max(prev, curr),
-      Number.MIN_SAFE_INTEGER,
-    );
+    console.log(JSON.stringify(dataX));
+    console.log(JSON.stringify(dataY));
 
-    const diff = max - min;
-    const gridMin = min - diff / 6;
-    const gridMax = max + diff / 6;
-    const contentInset = { top: 25, bottom: 25, right: 25 };
+    const maxValue = 1.4 * dataY.reduce((max, curr) => Math.max(max, curr));
 
     return (
       <View style={{
         height: 200,
+        padding: 20,
         flexDirection: 'row',
       }}>
         <YAxis
-          data={ data }
-          contentInset={ contentInset }
-          svg={{
-            fill: 'grey',
-            fontSize: 15,
-          }}
-          numberOfTicks={4}
-          formatLabel={ (value: any) => `${value} kg` }
-          min={gridMin}
-          max={gridMax}
+          data={ dataY }
+          style={ { marginBottom: xAxisHeight } }
+          contentInset={ { top: 10, bottom: 10 } }
+          svg={axesSvg}
+          numberOfTicks={5}
+          max={maxValue}
         />
-        <LineChart
-          style={{ flex: 1, marginLeft: 16 }}
-          data={ data }
-          svg={{
-            stroke: 'rgb(134, 65, 244)',
-            strokeWidth: 3,
-          }}
-          contentInset={ contentInset }
-          gridMin={gridMin}
-          gridMax={gridMax}
-          curve={curveMonotoneX}
-        />
+        <View style={{ flex: 1, marginLeft: 10 }}>
+          <LineChart
+            style={{ flex: 1 }}
+            data={ dataY }
+            svg={{ stroke: 'rgb(134, 65, 244)' }}
+            contentInset={ { top: 10, bottom: 10, left: 10, right: 10 } }
+            gridMax={maxValue}
+            curve={curveMonotoneX}
+          >
+            <Grid />
+          </LineChart>
+          <XAxis
+            style={{ marginHorizontal: -10, height: xAxisHeight }}
+            data={ dataX }
+            contentInset={ { left: 10, right: 10 } }
+          />
+        </View>
       </View>
     );
   }

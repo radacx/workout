@@ -14,6 +14,7 @@ import { createNewId } from '../../_shared/utils/createNewId';
 import { Validation } from '../../_types/validation/Validation';
 import { IStore } from '../../_shared/store/IStore';
 import { Screen } from '../../_types/navigation/Screen';
+import { dateUtils } from '../../_shared/utils/dateUtils';
 
 export let NavigationManager: Navigator;
 
@@ -35,7 +36,7 @@ export class TrainingLogApp extends React.PureComponent<Props> {
   };
 
   _navigateToSessionForm = () => {
-    const date = new Date().getTime();
+    const date = dateUtils.todayToNumber();
     const id = createNewId();
 
     const session: TrainingSessionModel = {

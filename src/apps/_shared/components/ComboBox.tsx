@@ -3,28 +3,36 @@ import * as React from 'react';
 import { Picker } from 'react-native';
 import { Validation } from '../../_types/validation/Validation';
 
-type Props<TItem> = {
+export type ComboBoxProps<TItem> = {
   readonly items: TItem[];
   readonly getLabel: (item: TItem) => string;
   readonly onItemChange: (item: TItem) => void;
+  readonly value?: TItem;
+};
+
+export const comboBoxPropTypes: Validation<ComboBoxProps<any>> = {
+  items: PropTypes.arrayOf(PropTypes.any).isRequired,
+  getLabel: PropTypes.func.isRequired,
+  onItemChange: PropTypes.func.isRequired,
+  value: PropTypes.any,
 };
 
 type State<TItem> = {
   readonly selectedItem: TItem;
 };
 
-export class ComboBox<TItem> extends React.PureComponent<Props<TItem>, State<TItem>> {
+export class ComboBox<TItem> extends React.PureComponent<ComboBoxProps<TItem>, State<TItem>> {
   static displayName = 'ComboBox';
 
-  static propTypes: Validation<Props<any>> = {
-    items: PropTypes.arrayOf(PropTypes.object).isRequired,
-    getLabel: PropTypes.func.isRequired,
-    onItemChange: PropTypes.func.isRequired,
-  };
+  static propTypes = comboBoxPropTypes;
 
   readonly state: State<TItem> = {
-    selectedItem: this.props.items[0],
+    selectedItem: this.props.value || this.props.items[0],
   };
+
+  componentDidMount() {
+    this.props.onItemChange(this.state.selectedItem);
+  }
 
   _selectedItemChanged = (item: TItem) => {
     this.setState({ selectedItem: item });
@@ -32,10 +40,10 @@ export class ComboBox<TItem> extends React.PureComponent<Props<TItem>, State<TIt
     this.props.onItemChange(item);
   };
 
-  componentWillReceiveProps(props: Props<TItem>) {
-    this.setState({
-      selectedItem: props.items[0],
-    });
+  componentWillReceiveProps(props: ComboBoxProps<any>) {
+    if (this.props.value !== props.value || this.props.items !== props.items) {
+      this.setState({ selectedItem: props.value || props.items[0] });
+    }
   }
 
   render() {
