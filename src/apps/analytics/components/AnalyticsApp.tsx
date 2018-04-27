@@ -1,6 +1,5 @@
 import {
   Text,
-  View,
   Switch,
 } from 'react-native';
 import React from 'react';
@@ -154,7 +153,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
       : this.state.dateTo;
 
     return (
-      <View>
+      <>
         <Text>
           From:
         </Text>
@@ -209,7 +208,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
           filterExercise={this.state.filterExercise}
           groupBy={this.state.groupBy}
         />
-      </View>
+      </>
     );
   }
 }

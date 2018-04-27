@@ -98,11 +98,10 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
 
     if (exercise) {
       const { id: _, ...ex } = exercise;
-      const isBodyweight = exercise.relativeBodyweight > 0;
 
       this.setState({
         ...ex,
-        isBodyweight,
+        isBodyweight: exercise.relativeBodyweight > 0,
       });
     }
   }
@@ -253,7 +252,7 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <View>
+      <>
         <Text>
           Name:
         </Text>
@@ -313,7 +312,7 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
           title="Submit exercise"
           onPress={this._submitExercise}
         />
-      </View>
+      </>
     );
   }
 }

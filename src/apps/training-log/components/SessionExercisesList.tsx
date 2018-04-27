@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {
-  Button,
-  View,
-} from 'react-native';
+import { Button } from 'react-native';
 import { SessionExercises } from './SessionExercises';
 import { SessionExercise } from '../../_types/data/SessionExercise';
 import { NavigationManager } from './TrainingLogApp';
@@ -48,14 +45,14 @@ export class SessionExercisesList extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View>
+      <>
         <Button
           title="Add exercise"
           onPress={this._navigateToNewExerciseForm}
         />
 
         <SessionExercises exercises={this.props.exercises}/>
-      </View>
+      </>
     );
   }
 }

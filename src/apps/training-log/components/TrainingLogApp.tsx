@@ -2,10 +2,7 @@ import PropTypes from 'prop-types';
 import React from 'react';
 import { ComponentList } from '../../_shared/containers/ComponentList';
 import { TrainingSession } from '../containers/TrainingSession';
-import {
-  Button,
-  View,
-} from 'react-native';
+import { Button } from 'react-native';
 import { Navigator } from 'react-native-navigation';
 import { componentsWithNavigationProps } from '../../../navigation/componentsWithNavigationProps';
 import { TrainingSession as TrainingSessionModel } from '../../_types/data/TrainingSession';
@@ -66,7 +63,7 @@ export class TrainingLogApp extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View>
+      <>
         <Button
           title="Add new session"
           onPress={this._navigateToSessionForm}
@@ -76,7 +73,7 @@ export class TrainingLogApp extends React.PureComponent<Props> {
           getItemsFromState={sessionsSelector}
           render={TrainingSession}
         />
-      </View>
+      </>
     );
   }
 }

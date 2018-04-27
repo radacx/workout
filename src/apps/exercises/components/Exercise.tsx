@@ -3,7 +3,6 @@ import * as React from 'react';
 import {
   Button,
   Text,
-  View,
 } from 'react-native';
 import { styles } from '../../_shared/constants/styles';
 import { NavigationManager } from './ExercisesApp';
@@ -39,7 +38,7 @@ export class Exercise extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View>
+      <>
         <Text style={styles.exercise}>
           {this.props.name}
         </Text>
@@ -48,7 +47,7 @@ export class Exercise extends React.PureComponent<Props> {
           title="View details"
           onPress={this._navigateToExerciseForm}
         />
-      </View>
+      </>
     );
   }
 }

@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {
-  Button,
-  View,
-} from 'react-native';
+import { Button } from 'react-native';
 import { ComboBox } from '../../_shared/components/ComboBox';
 import { Exercise } from '../../_types/data/Exercise';
 import { NavigationManager } from './TrainingLogApp';
@@ -63,7 +60,7 @@ export class SessionExerciseForm extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <View>
+      <>
         <ComboBox
           items={this.props.exercises}
           onItemChange={this._exerciseChanged}
@@ -74,7 +71,7 @@ export class SessionExerciseForm extends React.PureComponent<Props, State> {
           title="Add exercise"
           onPress={this._submitExercise}
         />
-      </View>
+      </>
     );
   }
 }

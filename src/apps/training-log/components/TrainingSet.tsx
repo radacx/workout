@@ -3,7 +3,6 @@ import React from 'react';
 import {
   Button,
   Text,
-  View,
 } from 'react-native';
 import { NumericInput } from '../../_shared/components/NumericInput';
 import { TrainingSet as TrainingSetModel } from '../../_types/data/TrainingSet';
@@ -65,7 +64,7 @@ export class TrainingSet extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <View>
+      <>
         <Text>
           {this.props.exerciseType === ExerciseType.Reps
             ? 'Reps'
@@ -96,7 +95,7 @@ export class TrainingSet extends React.PureComponent<Props, State> {
           title="Submit"
           onPress={this._onSubmit}
         />
-      </View>
+      </>
     );
   }
 }

@@ -1,6 +1,5 @@
 import PropTypes from 'prop-types';
 import {
-  View,
   Text,
   Button,
 } from 'react-native';
@@ -71,7 +70,7 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
 
   render() {
     return (
-      <View>
+      <>
         <Text>
           Bodyweight:
         </Text>
@@ -94,7 +93,7 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
         />
 
         <SessionExercisesList sessionId={this.props.sessionId}/>
-      </View>
+      </>
     );
   }
 }

@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import * as React from 'react';
-import {
-  Text,
-  View,
-} from 'react-native';
+import { Text } from 'react-native';
 import { TrainingSetsList } from '../containers/TrainingSetsList';
 import { ExerciseType } from '../../_types/enums/ExerciseType';
 import { Uuid } from '../../_types/Uuid';
@@ -29,7 +26,7 @@ const propTypes: Validation<Props> = {
 const SessionExercise: React.SFC<Props> = ({
   exerciseName, exerciseType, sessionExerciseId,
 }) =>
-  <View>
+  <>
     <Text>
       {exerciseName}
     </Text>
@@ -38,7 +35,7 @@ const SessionExercise: React.SFC<Props> = ({
       exerciseType={exerciseType}
       exerciseId={sessionExerciseId}
     />
-  </View>;
+  </>;
 
 SessionExercise.displayName = 'SessionExercise';
 SessionExercise.propTypes = propTypes;

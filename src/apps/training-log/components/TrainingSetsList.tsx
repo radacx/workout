@@ -1,9 +1,6 @@
 import PropTypes from 'prop-types';
 import React from 'react';
-import {
-  Button,
-  View,
-} from 'react-native';
+import { Button } from 'react-native';
 import { ExerciseType } from '../../_types/enums/ExerciseType';
 import { NavigationManager } from './TrainingLogApp';
 import { getNavigationHelperForComponent } from '../../../navigation/getNavigationHelperForComponent';
@@ -51,14 +48,14 @@ export class TrainingSetsList extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View>
+      <>
         <Button
           title="Add set"
           onPress={this._openNewSetForm}
         />
 
         <TrainingSets exerciseId={this.props.exerciseId}/>
-      </View>
+      </>
     );
   }
 }

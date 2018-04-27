@@ -4,7 +4,6 @@ import React from 'react';
 import {
   Button,
   Text,
-  View,
 } from 'react-native';
 import { NavigationManager } from './TrainingLogApp';
 import { Uuid } from '../../_types/Uuid';
@@ -49,7 +48,7 @@ export class TrainingSession extends React.PureComponent<Props> {
     const { session } = this.props;
 
     return (
-      <View>
+      <>
         <Text>
           {dateUtils.toStringFromNumber(session.date)}
         </Text>
@@ -61,7 +60,7 @@ export class TrainingSession extends React.PureComponent<Props> {
           title="View details"
           onPress={this._navigateToDetails}
         />
-      </View>
+      </>
     );
   }
 }

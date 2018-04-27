@@ -5,7 +5,6 @@ import {
   FlatList,
   ListRenderItemInfo,
   Text,
-  View,
 } from 'react-native';
 import { assign } from '../../utils/assign';
 import { SwitchItems } from './_types/SwitchItems';
@@ -95,7 +94,7 @@ export class SpecialSelectTransformed extends React.PureComponent<Props, State> 
   _renderSwitch = ({ item: switchItems, index: position }: ListRenderItemInfo<SwitchItems>) => {
 
     return (
-      <View>
+      <>
         {switchItems.label
         && <Text>
             {switchItems.label}
@@ -114,7 +113,7 @@ export class SpecialSelectTransformed extends React.PureComponent<Props, State> 
           extractText={this._extractText}
           testOptionEqual={this._testOptionEqual}
         />
-      </View>
+      </>
     );
   };
 
@@ -122,7 +121,7 @@ export class SpecialSelectTransformed extends React.PureComponent<Props, State> 
 
   render() {
     return (
-      <View>
+      <>
         <Button
           title="Submit"
           onPress={this._submit}
@@ -133,7 +132,7 @@ export class SpecialSelectTransformed extends React.PureComponent<Props, State> 
           renderItem={this._renderSwitch}
           keyExtractor={this._keyExtractor}
         />
-      </View>
+      </>
     );
   }
 }
