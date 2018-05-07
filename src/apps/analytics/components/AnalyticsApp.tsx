@@ -49,6 +49,7 @@ type State = {
   readonly dateTo: number;
   readonly filterBy: AnalyticsFilterBy;
   readonly groupBy: AnalyticsGroupBy;
+  readonly filterByValue?: any;
   readonly filterExercise: (sessionExercise: SessionExercise) => boolean;
 };
 
@@ -62,7 +63,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
     dateFrom: dateUtils.todayToNumber(),
     filterBy: AnalyticsFilterBy.Exercise,
     groupBy: AnalyticsGroupBy.Day,
-    filterExercise: () => false,
+    filterExercise: () => true,
   };
 
   _changeDateFrom = (dateFrom: number) => this.setState({ dateFrom });
@@ -80,9 +81,10 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
   _getExerciseById = (id: Uuid) =>
     this.props.allExercises.find(ex => ex.id === id);
 
-  _setExerciseFilter = ({ id }: Exercise) => {
+  _setExerciseFilter = (exercise: Exercise) => {
     this.setState({
-      filterExercise: (se: SessionExercise) => se.exerciseId === id,
+      filterExercise: (se: SessionExercise) => se.exerciseId === exercise.id,
+      filterByValue: exercise,
     });
   };
 
@@ -95,6 +97,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
           ? exercise.primaryMuscleGroups.indexOf(muscleGroup) !== -1
           : false;
       },
+      filterByValue: muscleGroup,
     });
   };
 
@@ -107,14 +110,18 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
           ? exercise.planesOfMovement.indexOf(movementPlane) !== -1
           : false;
       },
+      filterByValue: movementPlane,
     });
   };
 
   _renderFilterComponent = () => {
+    const { filterByValue } = this.state;
+
     switch (this.state.filterBy) {
       case AnalyticsFilterBy.Exercise: {
         return (
           <ComboBox
+            value={filterByValue}
             items={this.props.allExercises}
             getLabel={exercise => exercise.name}
             onItemChange={this._setExerciseFilter}
@@ -124,6 +131,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
       case AnalyticsFilterBy.MuscleGroup: {
         return (
           <ComboBox
+            value={filterByValue}
             items={allMuscleGroups}
             onItemChange={this._setMuscleGroupFilter}
             getLabel={mg => mg}
@@ -133,6 +141,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
       case AnalyticsFilterBy.PlaneOfMovement: {
         return (
           <ComboBox
+            value={filterByValue}
             items={allPlanesOfMovement}
             onItemChange={this._setMovementPlaneFilter}
             getLabel={pom => pom}
@@ -200,7 +209,7 @@ export class AnalyticsApp extends React.PureComponent<AnalyticsAppDataProps, Sta
           value={this.state.groupBy}
           onItemChange={this._changeGroupBy}
           getLabel={groupBy => groupBy}
-        />
+          />
 
         <ProgressionGraph
           dateFrom={dateFrom}

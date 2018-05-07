@@ -20,7 +20,7 @@ type Props = SessionExerciseFormDataProps
   & SessionExerciseFormCallbackProps;
 
 type State = {
-  readonly selectedExercise: Exercise;
+  readonly selectedExercise?: Exercise;
 };
 
 export class SessionExerciseForm extends React.PureComponent<Props, State> {
@@ -32,8 +32,12 @@ export class SessionExerciseForm extends React.PureComponent<Props, State> {
   };
 
   readonly state: State = {
-    selectedExercise: this.props.exercises[0],
+    selectedExercise: undefined,
   };
+
+  static getDerivedStateFromProps = ({ exercises }: Props): Partial<State> | null => ({
+    selectedExercise: exercises[0],
+  });
 
   _exerciseChanged = (selectedExercise: Exercise) =>
     this.setState({ selectedExercise });
@@ -41,22 +45,18 @@ export class SessionExerciseForm extends React.PureComponent<Props, State> {
   _getExerciseLabel = (exercise: Exercise) => exercise.name;
 
   _submitExercise = () => {
-    const sessionExercise: SessionExercise = {
-      id: createNewId(),
-      sets: {},
-      exerciseId: this.state.selectedExercise.id,
-    };
+    if (this.state.selectedExercise) {
+      const sessionExercise: SessionExercise = {
+        id: createNewId(),
+        sets: {},
+        exerciseId: this.state.selectedExercise.id,
+      };
 
-    this.props.addExercise(sessionExercise);
+      this.props.addExercise(sessionExercise);
 
-    NavigationManager.dismissModal();
+      NavigationManager.dismissModal();
+    }
   };
-
-  componentWillReceiveProps(props: Props) {
-    this.setState({
-      selectedExercise: props.exercises[0],
-    });
-  }
 
   render() {
     return (
@@ -70,6 +70,7 @@ export class SessionExerciseForm extends React.PureComponent<Props, State> {
         <Button
           title="Add exercise"
           onPress={this._submitExercise}
+          disabled={!this.state.selectedExercise}
         />
       </>
     );

@@ -43,24 +43,19 @@ export class SpecialSelectTransformed extends React.PureComponent<Props, State> 
     preselectedOptions: PropTypes.arrayOf(PropTypes.any),
   };
 
-  constructor(props: Props) {
-    super(props);
+  readonly state: State = {
+    selectedItems: [],
+  };
 
-    this.state = this._getInitialState(this.props);
-  }
-
-  componentWillReceiveProps(props: Props) {
-    this.setState(this._getInitialState(props));
-  }
-
-  _getInitialState = ({ preselectedOptions }: Props) => ({
+  static getDerivedStateFromProps = ({ preselectedOptions, switchOptions }: Props): Partial<State> | null => ({
     selectedItems: [
-      ...Array(this.props.switchOptions.length).keys(),
-    ]
-      .map(index => preselectedOptions
-        ? preselectedOptions[index] || SpecialSelectSelection.Default
-        : SpecialSelectSelection.Default),
-  });
+        ...Array(switchOptions.length)
+          .keys(),
+      ]
+        .map(index => preselectedOptions ? preselectedOptions[index]
+          || SpecialSelectSelection.Default : SpecialSelectSelection.Default),
+    });
+
 
   _keyExtractor = (_: SwitchItem[], index: number) => index.toString();
 

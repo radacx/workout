@@ -18,7 +18,7 @@ export const comboBoxPropTypes: Validation<ComboBoxProps<any>> = {
 };
 
 type State<TItem> = {
-  readonly selectedItem: TItem;
+  readonly selectedItem?: TItem;
 };
 
 export class ComboBox<TItem> extends React.PureComponent<ComboBoxProps<TItem>, State<TItem>> {
@@ -27,11 +27,17 @@ export class ComboBox<TItem> extends React.PureComponent<ComboBoxProps<TItem>, S
   static propTypes = comboBoxPropTypes;
 
   readonly state: State<TItem> = {
-    selectedItem: this.props.value || this.props.items[0],
+    selectedItem: undefined,
   };
 
+  static getDerivedStateFromProps = (nextProps: ComboBoxProps<any>): State<any> | null => ({
+    selectedItem: nextProps.value || nextProps.items[0],
+  });
+
   componentDidMount() {
-    this.props.onItemChange(this.state.selectedItem);
+    if (this.state.selectedItem) {
+      this.props.onItemChange(this.state.selectedItem);
+    }
   }
 
   _selectedItemChanged = (item: TItem) => {
@@ -39,12 +45,6 @@ export class ComboBox<TItem> extends React.PureComponent<ComboBoxProps<TItem>, S
 
     this.props.onItemChange(item);
   };
-
-  componentWillReceiveProps(props: ComboBoxProps<any>) {
-    if (this.props.value !== props.value || this.props.items !== props.items) {
-      this.setState({ selectedItem: props.value || props.items[0] });
-    }
-  }
 
   render() {
     return (

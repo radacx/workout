@@ -1,10 +1,12 @@
+import Moment from 'moment';
+
 export const dateUtils = Object.freeze({
   today: () => {
     const now = new Date();
     return new Date(now.getFullYear(), now.getMonth(), now.getDate());
   },
 
-  getWeek: (date: Date): number => 0,
+  getWeek: (date: Date): number => +Moment(date).format('w'),
 
   todayToString: () => dateUtils.toString(dateUtils.today()),
 

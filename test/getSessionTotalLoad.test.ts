@@ -12,7 +12,7 @@ const arrayToHomogenousObject = <T>(array: T[]): HomogenousObject<T> =>
   array as any;
 
 const createFakeExercise = (id: Uuid, relativeBodyweight = 0): Exercise => ({
-  exerciseType: ExerciseType.Duration,
+  exerciseType: ExerciseType.Reps,
   id,
   name: '',
   planesOfMovement: [],
@@ -56,7 +56,7 @@ describe('getSessionTotalLoad', () => {
       switch (id) {
         default:
         case '1':
-          relativeBodyweight = 0.5;
+          relativeBodyweight = 50;
       }
 
       return createFakeExercise(id, relativeBodyweight);

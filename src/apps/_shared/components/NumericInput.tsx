@@ -22,7 +22,7 @@ type State = {
 export class NumericInput extends React.PureComponent<Props, State> {
   static displayName = 'NumericInput';
 
-  static propTypes: Validation<Props> = {
+  static propTypes: Validation<OwnProps> = {
     onChangeNumber: PropTypes.func.isRequired,
     minValue: PropTypes.number,
     maxValue: PropTypes.number,
@@ -34,21 +34,16 @@ export class NumericInput extends React.PureComponent<Props, State> {
     maxValue: Number.MAX_SAFE_INTEGER,
   };
 
-  constructor(props: Props) {
-    super(props);
+  readonly state: State = {
+    number: '0',
+  };
 
-    this.state = {
-      number: this._getText(
-        this.props.minValue!,
-        this.props.initialNumber,
-      ),
-    };
-  }
-
-  _getText = (minNumber: number, initialNumber?: number) => initialNumber === undefined
-    ? undefined
-    : Math.max(initialNumber, minNumber)
-      .toString();
+  static getDerivedStateFromProps = ({ minValue, initialNumber }: Props): Partial<State> | null => ({
+    number: initialNumber === undefined
+      ? undefined
+      : Math.max(initialNumber, minValue!)
+        .toString(),
+  });
 
   _numberChanged = (numberText: string) => {
     let num = +numberText;
@@ -67,15 +62,6 @@ export class NumericInput extends React.PureComponent<Props, State> {
 
     this.props.onChangeNumber(num);
   };
-
-  componentWillReceiveProps(props: Props) {
-    this.setState({
-      number: this._getText(
-        props.minValue!,
-        props.initialNumber,
-      ),
-    });
-  }
 
   render() {
     return (

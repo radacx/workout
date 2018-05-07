@@ -45,9 +45,13 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
   };
 
   readonly state: State = {
-    bodyweight: this.props.bodyweight,
-    date: this.props.date,
+    date: 0,
+    bodyweight: 0,
   };
+
+  static getDerivedStateFromProps = ({ date, bodyweight }: Props): Partial<State> | null => ({
+    date, bodyweight,
+  });
 
   _onChangedBodyweight = (bodyweight: number) =>
     this.setState({ bodyweight });
@@ -63,10 +67,6 @@ export class TrainingSessionForm extends React.PureComponent<Props, State> {
 
     NavigationManager.pop();
   };
-
-  componentWillReceiveProps({ date, bodyweight }: Props) {
-    this.setState({ date, bodyweight });
-  }
 
   render() {
     return (

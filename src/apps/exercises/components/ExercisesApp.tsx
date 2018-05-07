@@ -38,17 +38,19 @@ export class ExercisesApp extends React.PureComponent<Props> {
 
   render() {
     return (
-      <View style={styles.container}>
-        <Button
-          onPress={this._navigateToNewExerciseForm}
-          title={'Add new exercise'}
-        />
+      <>
+        <View style={styles.container}>
+          <Button
+            onPress={this._navigateToNewExerciseForm}
+            title={'Add new exercise'}
+          />
 
-        <ComponentList
-          getItemsFromState={exercisesSelector}
-          render={Exercise}
-        />
-      </View>
+          <ComponentList
+            getItemsFromState={exercisesSelector}
+            render={Exercise}
+          />
+        </View>
+      </>
     );
   }
 }

@@ -5,6 +5,7 @@ import { Validation } from '../../_types/validation/Validation';
 import { dateUtils } from '../../_shared/utils/dateUtils';
 const {
   LineChart,
+  BarChart,
   YAxis,
   XAxis,
   Grid,
@@ -14,6 +15,11 @@ import { curveMonotoneX } from 'd3-shape';
 export type Point = {
   x: string;
   y: number;
+};
+
+type AccessorEntry = {
+    item: Point;
+    index: number;
 };
 
 export type ProgressionGraphDataProps = {
@@ -34,22 +40,24 @@ export class ProgressionGraph extends React.PureComponent<ProgressionGraphDataPr
 
   _formatDate = (date: number) => dateUtils.toStringFromNumber(date);
 
-  componentDidMount() {
-    console.log(',pinted;')
-  }
+  _yAccessor = ({ item }: AccessorEntry) => item.y;
+
+  _xAccessor = ({ item }: AccessorEntry) => item.x;
 
   render() {
-    console.log('render');
     const axesSvg = { fontSize: 10, fill: 'grey' };
     const xAxisHeight = 30;
 
     const dataY = this.props.points.map(fv => fv.y);
-    const dataX = this.props.points.map(fv => fv.x);
-
-    console.log(JSON.stringify(dataX));
-    console.log(JSON.stringify(dataY));
-
     const maxValue = 1.4 * dataY.reduce((max, curr) => Math.max(max, curr));
+
+    const Chart = dataY.length > 1
+      ? LineChart
+      : BarChart;
+
+    const chartSvg = dataY.length > 1
+      ? { stroke: 'rgb(134, 65, 244)' }
+      : { fill: 'rgb(134, 65, 244)' };
 
     return (
       <View style={{
@@ -58,7 +66,8 @@ export class ProgressionGraph extends React.PureComponent<ProgressionGraphDataPr
         flexDirection: 'row',
       }}>
         <YAxis
-          data={ dataY }
+          data={ this.props.points }
+          yAccessor={this._yAccessor}
           style={ { marginBottom: xAxisHeight } }
           contentInset={ { top: 10, bottom: 10 } }
           svg={axesSvg}
@@ -66,19 +75,20 @@ export class ProgressionGraph extends React.PureComponent<ProgressionGraphDataPr
           max={maxValue}
         />
         <View style={{ flex: 1, marginLeft: 10 }}>
-          <LineChart
+          <Chart
             style={{ flex: 1 }}
             data={ dataY }
-            svg={{ stroke: 'rgb(134, 65, 244)' }}
+            svg={chartSvg}
             contentInset={ { top: 10, bottom: 10, left: 10, right: 10 } }
             gridMax={maxValue}
             curve={curveMonotoneX}
           >
             <Grid />
-          </LineChart>
+          </Chart>
           <XAxis
             style={{ marginHorizontal: -10, height: xAxisHeight }}
-            data={ dataX }
+            data={this.props.points}
+            xAccessor={this._xAccessor}
             contentInset={ { left: 10, right: 10 } }
           />
         </View>

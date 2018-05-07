@@ -32,10 +32,10 @@ const getGroupinfKeyCreator = (groupBy: AnalyticsGroupBy) =>
         return [ date.getMonth() + 1, date.getFullYear() ].join('/');
       }
       case AnalyticsGroupBy.Month3: {
-        return [ date.getMonth() % 3 + 1, date.getFullYear() ].join('/');
+        return [ Math.floor(date.getMonth() / 3) + 1, date.getFullYear() ].join('/');
       }
       case AnalyticsGroupBy.Month6: {
-        return [ date.getMonth() % 6 + 1, date.getFullYear() ].join('/');
+        return [ Math.floor(date.getMonth() / 6) + 1, date.getFullYear() ].join('/');
       }
       case AnalyticsGroupBy.Year: {
         return date.getFullYear().toString();
@@ -66,7 +66,6 @@ const getFilterFunction = (sessions: TrainingSession[], getExerciseById: (id: Uu
           return groupPoints;
         }
 
-        console.log(`new: ${JSON.stringify({ groupingKey, load })}`);
         return groupPoints.concat({ groupingKey, load });
       },
       [] as { groupingKey: string, load: number }[],

@@ -93,18 +93,18 @@ export class ExerciseForm extends React.PureComponent<Props, State> {
     relativeBodyweight: 0,
   };
 
-  componentWillMount() {
-    const exercise = this.props.exercise;
-
+  static getDerivedStateFromProps = ({ exercise }: Props): Partial<State> | null => {
     if (exercise) {
       const { id: _, ...ex } = exercise;
 
-      this.setState({
+      return {
         ...ex,
         isBodyweight: exercise.relativeBodyweight > 0,
-      });
+      };
     }
-  }
+
+    return null;
+  };
 
   _submitExercise = () => {
     const id = this.props.exercise

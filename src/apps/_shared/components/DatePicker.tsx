@@ -40,15 +40,13 @@ export class DatePicker extends React.PureComponent<Props, State> {
     disabled: false,
   };
 
-  constructor(props: Props) {
-    super(props);
+  readonly state: State = {
+    date: dateUtils.toString(new Date()),
+  };
 
-    this.state = {
-      date: this._getInitialStringDate(props.value!),
-    };
-  }
-
-  _getInitialStringDate = (date: number) => dateUtils.toStringFromNumber(date);
+  static getDerivedStateFromProps = ({ value }: Props): Partial<State> | null => ({
+    date: dateUtils.toStringFromNumber(value!),
+  });
 
   _onDateChanged = (dateString: string) => {
     this.setState({ date: dateString });
@@ -56,12 +54,6 @@ export class DatePicker extends React.PureComponent<Props, State> {
     const date = dateUtils.fromTextToNumber(dateString);
     this.props.onDateChange(date);
   };
-
-  componentWillReceiveProps(props: Props) {
-    this.setState({
-      date: this._getInitialStringDate(props.value!),
-    });
-  }
 
   render() {
     const {

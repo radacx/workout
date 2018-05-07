@@ -3,6 +3,7 @@ import {
   createStore,
   applyMiddleware,
   Store,
+  Reducer,
 } from 'redux';
 import {
   persistReducer,
@@ -13,6 +14,7 @@ import { PersistConfig } from 'redux-persist/es/types';
 import autoMergeLevel2 from 'redux-persist/es/stateReconciler/autoMergeLevel2';
 import thunk from 'redux-thunk';
 import { persistStore } from 'redux-persist';
+import { IStore } from '../store/IStore';
 
 const persistConfig: PersistConfig = {
   key: 'root',
@@ -28,7 +30,7 @@ export const configureStoreForWixNavigation = (
   clearStorage = false,
 ) => {
   const store = createStore(
-    persistedReducer,
+    persistedReducer as Reducer<IStore>,
     composeEnhancers(applyMiddleware(thunk)),
   );
 
