@@ -6,12 +6,15 @@ import com.oblador.vectoricons.VectorIconsPackage;
 import android.app.Application;
 
 import com.facebook.react.ReactApplication;
-import com.horcrux.svg.SvgPackage;
+import com.facebook.react.bridge.ReadableNativeArray;
+import com.facebook.react.bridge.ReadableNativeMap;
+import com.github.wuxudong.rncharts.MPAndroidChartPackage;
 import com.facebook.react.ReactNativeHost;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
 import com.facebook.soloader.SoLoader;
 
+import java.lang.reflect.Method;
 import java.util.Arrays;
 import java.util.List;
 
@@ -28,7 +31,7 @@ public class MainApplication extends NavigationApplication {
     protected List<ReactPackage> getPackages() {
       return Arrays.<ReactPackage>asList(
           new MainReactPackage(),
-            new SvgPackage()
+            new MPAndroidChartPackage()
       );
     }
 
@@ -60,7 +63,7 @@ public class MainApplication extends NavigationApplication {
          // No need to add RnnPackage and MainReactPackage
          return Arrays.<ReactPackage>asList(
              new VectorIconsPackage(),
-             new SvgPackage()
+             new MPAndroidChartPackage()
          );
      }
 
@@ -73,4 +76,29 @@ public class MainApplication extends NavigationApplication {
     public String getJSMainModuleName() {
       return "index";
     }
+
+    @Override
+        public void onCreate() {
+            super.onCreate();
+            SoLoader.init(this, /* native exopackage */ false);
+
+            // call for react native >= 0.54.0
+            ReadableNativeArray.setUseNativeAccessor(true);
+            ReadableNativeMap.setUseNativeAccessor(true);
+            try {
+                Method arrayUseNativeAccessor = ReadableNativeArray.class.getDeclaredMethod("setUseNativeAccessor", boolean.class);
+                if (arrayUseNativeAccessor != null) {
+                    arrayUseNativeAccessor.invoke(null, true);
+                }
+
+                Method mapUseNativeAccessor = ReadableNativeMap.class.getDeclaredMethod("setUseNativeAccessor", boolean.class);
+                if (mapUseNativeAccessor != null) {
+                    mapUseNativeAccessor.invoke(null, true);
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+
+
+        }
 }
