@@ -1,5 +1,4 @@
 import { assign } from '../../../_shared/utils/assign';
-import * as actions from '../../actions/actionCreators';
 import {
   Exercises_AddExercise,
   Exercises_DeleteExercise,
@@ -10,46 +9,35 @@ import { ExercisesAction } from '../../_types/ExercisesAction';
 
 type State = typeof initialExercisesAppStoreState.exercises;
 
-const addExercise = (state: State, { payload: { exercise } }: ReturnType<typeof actions.addExercise>,
-): State => assign(
-  state,
-  st => ({
-    ...st,
-    [exercise.id]: exercise,
-  }),
-);
-
-const updateExercise = (state: State, { payload: { exercise } }: ReturnType<typeof actions.updateExercise>,
-): State => assign(
-  state,
-  st => ({
-    ...st,
-    [exercise.id]: exercise,
-  }),
-);
-
-const removeExercise = (state: State, { payload: { id } }: ReturnType<typeof actions.removeExercise>,
-): State => assign(
-  state,
-  st => {
-    const temp = { ...st };
-    delete temp[id];
-
-    return temp;
-  },
-);
-
 export const exercises = (state = initialExercisesAppStoreState.exercises, action: ExercisesAction): State => {
   switch (action.type) {
     case Exercises_AddExercise: {
-      return addExercise(state, action);
+      const { exercise } = action.payload;
+
+      return assign(state, st => ({
+        ...st,
+        [exercise.id]: exercise,
+      }));
     }
+
     case Exercises_UpdateExercise: {
-      return updateExercise(state, action);
+      const { exercise } = action.payload;
+
+      return assign(state, st => ({
+        ...st,
+        [exercise.id]: exercise,
+      }));
     }
+
     case Exercises_DeleteExercise: {
-      return removeExercise(state, action);
+      return assign(state, st => {
+        const tempState = { ...st };
+        delete tempState[action.payload.id];
+
+        return tempState;
+      });
     }
+
     default:
       return state;
   }
